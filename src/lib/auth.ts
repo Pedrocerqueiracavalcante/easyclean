@@ -1,0 +1,40 @@
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { getDb } from "@/lib/db";
+import * as schema from "@/lib/db/schema";
+
+export function createAuth(db: D1Database) {
+  return betterAuth({
+    database: drizzleAdapter(getDb(db), {
+      provider: "sqlite",
+      schema: {
+        user: schema.users,
+        session: schema.sessions,
+        account: schema.accounts,
+        verification: schema.verifications,
+      },
+    }),
+    emailAndPassword: {
+      enabled: true,
+      requireEmailVerification: true,
+    },
+    socialProviders: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      },
+    },
+    user: {
+      additionalFields: {
+        phone: { type: "string", required: false },
+        role: { type: "string", required: false, defaultValue: "client" },
+      },
+    },
+    session: {
+      cookieCache: { enabled: true, maxAge: 60 * 5 },
+    },
+    trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL!],
+  });
+}
+
+export type Auth = ReturnType<typeof createAuth>;

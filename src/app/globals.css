@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Easy Clean Brand Colors */
+  --color-primary: #2D6A2D;
+  --color-primary-dark: #1e4d1e;
+  --color-primary-light: #4a8f4a;
+  --color-secondary: #6ABF3C;
+  --color-secondary-dark: #4d9a26;
+  --color-secondary-light: #8fd460;
+  --color-accent: #e8f5e0;
+
+  /* Neutrals */
+  --color-surface: #f8faf7;
+  --color-surface-card: #ffffff;
+  --color-border: #e2e8df;
+  --color-muted: #6b7a6b;
+  --color-muted-light: #9baa9b;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f1a0f;
+    --foreground: #ededed;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c8d6c8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #6ABF3C; }
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid #6ABF3C;
+  outline-offset: 2px;
+}
+
+.hero-scan {
+  background:
+    linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.1) 12%, transparent 24%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 90px);
+  transform: translateX(-20%);
+  animation: hero-scan 9s ease-in-out infinite alternate;
+}
+
+.hero-glow {
+  animation: hero-glow 5s ease-in-out infinite alternate;
+}
+
+.hero-reveal {
+  animation: hero-reveal 800ms ease-out both;
+}
+
+.hero-float {
+  animation: hero-float 5s ease-in-out infinite;
+}
+
+@keyframes hero-scan {
+  from {
+    transform: translateX(-24%) skewX(-8deg);
+  }
+  to {
+    transform: translateX(18%) skewX(-8deg);
+  }
+}
+
+@keyframes hero-glow {
+  from {
+    opacity: 0.45;
+    transform: translateX(-50%) scale(0.92);
+  }
+  to {
+    opacity: 0.75;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scan,
+  .hero-glow,
+  .hero-reveal,
+  .hero-float {
+    animation: none;
+  }
+}
