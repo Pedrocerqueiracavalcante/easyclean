@@ -2,6 +2,12 @@
 
 Site e app para uma lavandaria ao domicilio em Luxembourg, com landing page, area do cliente, pedidos, tracking, admin, assinaturas e deploy em Cloudflare Workers.
 
+![Next.js](https://img.shields.io/badge/Next.js-15-111111?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-2563eb?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare_Workers-f97316?style=for-the-badge&logo=cloudflare&logoColor=white)
+![D1](https://img.shields.io/badge/Cloudflare_D1-2d6a2d?style=for-the-badge&logo=sqlite&logoColor=white)
+
 ![Easy Clean](public/easyclean-logo.png)
 
 ## Site ao vivo
@@ -23,6 +29,10 @@ Site e app para uma lavandaria ao domicilio em Luxembourg, com landing page, are
 
 - Next.js 15
 - TypeScript
+- JavaScript
+- HTML
+- CSS
+- SQL
 - Tailwind CSS v4
 - Cloudflare Workers
 - Cloudflare D1
