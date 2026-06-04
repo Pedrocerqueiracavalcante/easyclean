@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { Languages } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 type LanguageCode = "pt" | "en" | "fr" | "de" | "es";
 
-const languages: { code: LanguageCode; label: string }[] = [
-  { code: "pt", label: "PT" },
-  { code: "en", label: "EN" },
-  { code: "fr", label: "FR" },
-  { code: "de", label: "DE" },
-  { code: "es", label: "ES" },
+const languages: { code: LanguageCode; label: string; flag: string; name: string }[] = [
+  { code: "pt", label: "PT", flag: "🇵🇹", name: "Português" },
+  { code: "en", label: "EN", flag: "🇬🇧", name: "English" },
+  { code: "fr", label: "FR", flag: "🇫🇷", name: "Français" },
+  { code: "de", label: "DE", flag: "🇩🇪", name: "Deutsch" },
+  { code: "es", label: "ES", flag: "🇪🇸", name: "Español" },
 ];
 
 const translations: Record<Exclude<LanguageCode, "pt">, Record<string, string>> = {
@@ -393,22 +393,29 @@ export function LanguageSelector() {
     translatePage(nextLanguage);
   }
 
+  const currentLanguage = languages.find((item) => item.code === language) ?? languages[0];
+
   return (
-    <div className="notranslate flex items-center gap-2 rounded-full border border-[#dbe8d4] bg-white px-3 py-2 text-[#245f2f] shadow-sm">
-      <Languages className="h-4 w-4 text-[#2d6a2d]" />
+    <div className="notranslate relative inline-flex h-10 min-w-[92px] items-center rounded-full border border-[#dbe8d4] bg-white px-3 text-[#245f2f] shadow-sm transition-shadow hover:shadow-md">
+      <div className="pointer-events-none flex w-full items-center gap-2 pr-5">
+        <span className="text-base leading-none" aria-hidden="true">{currentLanguage.flag}</span>
+        <span className="text-sm font-bold uppercase">{currentLanguage.label}</span>
+        <ChevronDown className="absolute right-3 h-4 w-4 text-[#2d6a2d]" aria-hidden="true" />
+      </div>
       <label htmlFor={selectId} className="sr-only">
         Idioma do site
       </label>
       <select
         id={selectId}
         aria-label="Idioma do site"
-        className="cursor-pointer bg-transparent text-xs font-bold uppercase text-[#245f2f] outline-none [&_option]:bg-white [&_option]:text-[#245f2f]"
+        title={currentLanguage.name}
+        className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-full bg-transparent opacity-0 outline-none"
         value={language}
         onChange={(event) => handleLanguageChange(event.target.value as LanguageCode)}
       >
         {languages.map((item) => (
           <option key={item.code} value={item.code}>
-            {item.label}
+            {item.flag} {item.label} - {item.name}
           </option>
         ))}
       </select>
