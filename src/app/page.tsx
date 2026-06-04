@@ -4,15 +4,13 @@ import {
   CalendarDays,
   ChevronDown,
   Droplets,
-  Leaf,
   PackageCheck,
-  Shirt,
-  Sparkles,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { MobileInstallPrompt } from "@/components/mobile-install-prompt";
+import { ServicesCarousel } from "@/components/services-carousel";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
@@ -21,15 +19,6 @@ const steps = [
   { n: "03", title: "Tratamento da roupa", desc: "A roupa é lavada, seca e organizada com cuidado.", icon: Droplets },
   { n: "04", title: "Entrega em casa", desc: "Recebe tudo pronto para usar.", icon: PackageCheck },
 ];
-
-const serviceIconBySlug = {
-  lavagem: Droplets,
-  "passagem-a-ferro": Shirt,
-  "limpeza-a-seco": Shirt,
-  "roupas-de-cama": Sparkles,
-  calcado: PackageCheck,
-  "saco-completo": Leaf,
-};
 
 const contactInfo = {
   location: "Luxembourg",
@@ -179,30 +168,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {servicePages.map((service) => {
-              const Icon = serviceIconBySlug[service.slug];
-              return (
-                <Link
-                  key={service.slug}
-                  href={`/servicos/${service.slug}`}
-                  className="group rounded-lg border border-[#dbe8d4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6abf3c] hover:shadow-md"
-                >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#eef8e8] text-[#2d6a2d]">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mb-2 font-semibold text-[#102316]">{service.title}</h3>
-                  <p className="mb-4 text-sm leading-6 text-[#64748b]">{service.subtitle}</p>
-                  <div className="flex items-center justify-between gap-3 border-t border-[#e2e8df] pt-4">
-                    <span className="text-sm font-bold text-[#2d6a2d]">{service.price}</span>
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#94a3b8] transition-colors group-hover:text-[#2d6a2d]">
-                      Ver guia
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          <ServicesCarousel />
 
           <div className="mt-12 text-center">
             <Link href="/register">
