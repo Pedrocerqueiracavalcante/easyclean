@@ -59,10 +59,11 @@ export function ServicesCarousel() {
             <Link
               key={service.slug}
               href={`/servicos/${service.slug}`}
-              className="group min-w-[260px] snap-start rounded-lg border border-[#dbe8d4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6abf3c] hover:shadow-md sm:min-w-[310px] lg:min-w-[340px]"
+              className="group relative min-w-[260px] snap-start overflow-hidden rounded-lg border border-[#dbe8d4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6abf3c] hover:shadow-lg hover:shadow-[#2d6a2d]/10 sm:min-w-[310px] lg:min-w-[340px]"
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#eef8e8] text-[#2d6a2d]">
-                <Icon className="h-6 w-6" />
+              <div className="absolute right-4 top-4 h-16 w-16 rounded-full bg-[#eef8e8] opacity-60 transition-transform duration-300 group-hover:scale-125" aria-hidden="true" />
+              <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6abf3c] to-[#2d6a2d] text-white shadow-lg shadow-[#2d6a2d]/20 ring-4 ring-[#eef8e8]">
+                <Icon className="h-8 w-8 stroke-[2.4]" />
               </div>
               <h3 className="mb-2 font-semibold text-[#102316]">{service.title}</h3>
               <p className="mb-4 min-h-[72px] text-sm leading-6 text-[#64748b]">{service.subtitle}</p>

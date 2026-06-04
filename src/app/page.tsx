@@ -144,9 +144,9 @@ export default function LandingPage() {
             {steps.map((step) => {
               const Icon = step.icon;
               return (
-                <div key={step.n} className="rounded-lg border border-[#dbe8d4] bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-[#eef8e8] text-[#2d6a2d]">
-                    <Icon className="h-7 w-7" />
+                <div key={step.n} className="rounded-lg border border-[#dbe8d4] bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#6abf3c] hover:shadow-lg hover:shadow-[#2d6a2d]/10">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6abf3c] to-[#2d6a2d] text-white shadow-lg shadow-[#2d6a2d]/20 ring-4 ring-[#eef8e8]">
+                    <Icon className="h-8 w-8 stroke-[2.4]" />
                   </div>
                   <span className="text-xs font-bold tracking-widest text-[#6abf3c]">{step.n}</span>
                   <h3 className="mb-2 mt-1 font-semibold text-[#102316]">{step.title}</h3>
