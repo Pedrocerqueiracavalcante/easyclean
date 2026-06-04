@@ -158,9 +158,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="servicos" className="bg-white py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-12 text-center">
+      <section id="servicos" className="relative overflow-hidden bg-[#071108] py-20 text-white">
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#2d6a2d]/35 to-transparent" aria-hidden="true" />
+        <div className="absolute -right-28 top-16 h-64 w-64 rounded-full bg-[#6abf3c]/20 blur-3xl" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-4">
+          <div className="hidden">
             <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Serviços</p>
             <h2 className="mb-4 text-3xl font-bold text-[#102316] md:text-4xl">Serviços de lavandaria</h2>
             <p className="mx-auto max-w-xl text-[#64748b]">
@@ -168,11 +170,23 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <ServicesCarousel />
+          <div className="mb-12">
+            <p className="mb-4 text-sm font-bold uppercase tracking-widest text-[#9be66a]">Catalogo Easy Clean</p>
+            <h2 className="max-w-3xl text-4xl font-black leading-tight tracking-tight md:text-6xl">
+              Escolha o cuidado ideal
+              <span className="block font-serif italic font-normal text-[#9be66a]">para cada tipo de roupa</span>
+            </h2>
+          </div>
+
+          <div className="mx-auto max-w-5xl rounded-[2rem] border-[10px] border-white/20 bg-white p-3 shadow-2xl shadow-black/40">
+            <div className="rounded-[1.4rem] border border-[#dbe8d4] bg-[#f7fbf4] p-4 md:p-8">
+              <ServicesCarousel />
+            </div>
+          </div>
 
           <div className="mt-12 text-center">
             <Link href="/register">
-              <Button size="lg" className="bg-[#2d6a2d] px-8 text-white hover:bg-[#245f2f]">
+              <Button size="lg" className="bg-[#6abf3c] px-8 text-[#071108] hover:bg-[#9be66a]">
                 Criar conta para pedir
               </Button>
             </Link>
