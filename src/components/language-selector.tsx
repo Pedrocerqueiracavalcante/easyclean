@@ -561,6 +561,94 @@ for (const code of ["en", "fr", "de", "es"] as const) {
   Object.assign(translations[code], cleanTranslations[code]);
 }
 
+Object.assign(translations.en, {
+  "Confiança": "Trust",
+  "Por que escolher a Easy Clean?": "Why choose Easy Clean?",
+  "A equipa recolhe e devolve na morada combinada.": "The team picks up and returns at the agreed address.",
+  "Pagamento seguro": "Secure payment",
+  "Fluxo preparado para pedidos online com conta do cliente.": "Flow prepared for online orders with a customer account.",
+  "Suporte direto": "Direct support",
+  "Contacto simples para dúvidas, horários e pedidos especiais.": "Simple contact for questions, schedules and special requests.",
+  "Serviço organizado": "Organized service",
+  "Pedidos, serviços e entregas pensados para acompanhamento online.": "Orders, services and deliveries designed for online tracking.",
+  "Dúvidas frequentes": "Frequently asked questions",
+  "Antes de pedir": "Before ordering",
+  "Como funciona a recolha?": "How does pickup work?",
+  "O cliente cria conta, informa a morada e agenda a recolha. A roupa é tratada e depois devolvida em casa.": "The customer creates an account, enters the address and schedules pickup. The laundry is handled and returned home.",
+  "Quanto tempo demora?": "How long does it take?",
+  "O prazo depende do tipo de serviço e volume da roupa. A confirmação pode ser feita antes do pedido.": "The time depends on the service type and laundry volume. Confirmation can be made before the order.",
+  "Como faço o pedido?": "How do I order?",
+  "Basta criar conta ou entrar no app, escolher o serviço e acompanhar o estado do pedido online.": "Just create an account or log into the app, choose the service and track the order online.",
+  "Atendem minha zona?": "Do you serve my area?",
+  "O atendimento é focado em Luxembourg. A disponibilidade da morada pode ser confirmada no contacto.": "Service is focused on Luxembourg. Address availability can be confirmed by contact.",
+});
+
+Object.assign(translations.fr, {
+  "Confiança": "Confiance",
+  "Por que escolher a Easy Clean?": "Pourquoi choisir Easy Clean ?",
+  "A equipa recolhe e devolve na morada combinada.": "L'équipe collecte et livre à l'adresse convenue.",
+  "Pagamento seguro": "Paiement sécurisé",
+  "Fluxo preparado para pedidos online com conta do cliente.": "Parcours préparé pour les commandes en ligne avec compte client.",
+  "Suporte direto": "Support direct",
+  "Contacto simples para dúvidas, horários e pedidos especiais.": "Contact simple pour questions, horaires et demandes spéciales.",
+  "Serviço organizado": "Service organisé",
+  "Pedidos, serviços e entregas pensados para acompanhamento online.": "Commandes, services et livraisons pensés pour le suivi en ligne.",
+  "Dúvidas frequentes": "Questions fréquentes",
+  "Antes de pedir": "Avant de commander",
+  "Como funciona a recolha?": "Comment fonctionne la collecte ?",
+  "O cliente cria conta, informa a morada e agenda a recolha. A roupa é tratada e depois devolvida em casa.": "Le client crée un compte, indique l'adresse et planifie la collecte. Le linge est traité puis livré à domicile.",
+  "Quanto tempo demora?": "Combien de temps cela prend ?",
+  "O prazo depende do tipo de serviço e volume da roupa. A confirmação pode ser feita antes do pedido.": "Le délai dépend du type de service et du volume. La confirmation peut être faite avant la commande.",
+  "Como faço o pedido?": "Comment commander ?",
+  "Basta criar conta ou entrar no app, escolher o serviço e acompanhar o estado do pedido online.": "Il suffit de créer un compte ou de se connecter, choisir le service et suivre la commande en ligne.",
+  "Atendem minha zona?": "Servez-vous ma zone ?",
+  "O atendimento é focado em Luxembourg. A disponibilidade da morada pode ser confirmada no contacto.": "Le service est centré sur Luxembourg. La disponibilité de l'adresse peut être confirmée par contact.",
+});
+
+Object.assign(translations.de, {
+  "Confiança": "Vertrauen",
+  "Por que escolher a Easy Clean?": "Warum Easy Clean wählen?",
+  "A equipa recolhe e devolve na morada combinada.": "Das Team holt ab und liefert an die vereinbarte Adresse.",
+  "Pagamento seguro": "Sichere Zahlung",
+  "Fluxo preparado para pedidos online com conta do cliente.": "Ablauf für Online-Bestellungen mit Kundenkonto vorbereitet.",
+  "Suporte direto": "Direkter Support",
+  "Contacto simples para dúvidas, horários e pedidos especiais.": "Einfacher Kontakt für Fragen, Zeiten und Sonderwünsche.",
+  "Serviço organizado": "Organisierter Service",
+  "Pedidos, serviços e entregas pensados para acompanhamento online.": "Bestellungen, Services und Lieferungen für Online-Tracking gedacht.",
+  "Dúvidas frequentes": "Häufige Fragen",
+  "Antes de pedir": "Vor der Bestellung",
+  "Como funciona a recolha?": "Wie funktioniert die Abholung?",
+  "O cliente cria conta, informa a morada e agenda a recolha. A roupa é tratada e depois devolvida em casa.": "Der Kunde erstellt ein Konto, gibt die Adresse ein und plant die Abholung. Die Wäsche wird bearbeitet und nach Hause geliefert.",
+  "Quanto tempo demora?": "Wie lange dauert es?",
+  "O prazo depende do tipo de serviço e volume da roupa. A confirmação pode ser feita antes do pedido.": "Die Dauer hängt von Serviceart und Wäschemenge ab. Die Bestätigung kann vor der Bestellung erfolgen.",
+  "Como faço o pedido?": "Wie bestelle ich?",
+  "Basta criar conta ou entrar no app, escolher o serviço e acompanhar o estado do pedido online.": "Einfach Konto erstellen oder einloggen, Service wählen und den Status online verfolgen.",
+  "Atendem minha zona?": "Bedienen Sie meine Gegend?",
+  "O atendimento é focado em Luxembourg. A disponibilidade da morada pode ser confirmada no contacto.": "Der Service konzentriert sich auf Luxembourg. Die Verfügbarkeit der Adresse kann per Kontakt bestätigt werden.",
+});
+
+Object.assign(translations.es, {
+  "Confiança": "Confianza",
+  "Por que escolher a Easy Clean?": "¿Por qué elegir Easy Clean?",
+  "A equipa recolhe e devolve na morada combinada.": "El equipo recoge y entrega en la dirección acordada.",
+  "Pagamento seguro": "Pago seguro",
+  "Fluxo preparado para pedidos online com conta do cliente.": "Flujo preparado para pedidos online con cuenta del cliente.",
+  "Suporte direto": "Soporte directo",
+  "Contacto simples para dúvidas, horários e pedidos especiais.": "Contacto simple para dudas, horarios y pedidos especiales.",
+  "Serviço organizado": "Servicio organizado",
+  "Pedidos, serviços e entregas pensados para acompanhamento online.": "Pedidos, servicios y entregas pensados para seguimiento online.",
+  "Dúvidas frequentes": "Preguntas frecuentes",
+  "Antes de pedir": "Antes de pedir",
+  "Como funciona a recolha?": "¿Cómo funciona la recogida?",
+  "O cliente cria conta, informa a morada e agenda a recolha. A roupa é tratada e depois devolvida em casa.": "El cliente crea una cuenta, informa la dirección y agenda la recogida. La ropa se trata y luego se devuelve en casa.",
+  "Quanto tempo demora?": "¿Cuánto tarda?",
+  "O prazo depende do tipo de serviço e volume da roupa. A confirmação pode ser feita antes do pedido.": "El plazo depende del tipo de servicio y volumen de ropa. La confirmación puede hacerse antes del pedido.",
+  "Como faço o pedido?": "¿Cómo hago el pedido?",
+  "Basta criar conta ou entrar no app, escolher o serviço e acompanhar o estado do pedido online.": "Solo crea una cuenta o entra en la app, elige el servicio y sigue el estado online.",
+  "Atendem minha zona?": "¿Atienden mi zona?",
+  "O atendimento é focado em Luxembourg. A disponibilidade da morada pode ser confirmada no contacto.": "El servicio se centra en Luxembourg. La disponibilidad de la dirección puede confirmarse por contacto.",
+});
+
 function translatePage(language: LanguageCode) {
   const dictionary = language === "pt" ? {} : translations[language];
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
