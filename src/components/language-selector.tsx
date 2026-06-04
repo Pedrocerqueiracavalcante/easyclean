@@ -394,15 +394,15 @@ export function LanguageSelector() {
   }
 
   return (
-    <div className="notranslate flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-2 text-white shadow-sm backdrop-blur">
-      <Languages className="h-4 w-4 text-[#b9f25a]" />
+    <div className="notranslate flex items-center gap-2 rounded-full border border-[#dbe8d4] bg-white px-3 py-2 text-[#245f2f] shadow-sm">
+      <Languages className="h-4 w-4 text-[#2d6a2d]" />
       <label htmlFor={selectId} className="sr-only">
         Idioma do site
       </label>
       <select
         id={selectId}
         aria-label="Idioma do site"
-        className="cursor-pointer bg-transparent text-xs font-bold uppercase text-white outline-none [&_option]:bg-[#071108] [&_option]:text-white"
+        className="cursor-pointer bg-transparent text-xs font-bold uppercase text-[#245f2f] outline-none [&_option]:bg-white [&_option]:text-[#245f2f]"
         value={language}
         onChange={(event) => handleLanguageChange(event.target.value as LanguageCode)}
       >
