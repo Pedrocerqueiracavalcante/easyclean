@@ -379,6 +379,7 @@ export function LanguageSelector() {
   });
 
   useEffect(() => {
+    document.documentElement.lang = language;
     translatePage(language);
   }, [language]);
 
@@ -435,9 +436,16 @@ export function LanguageSelector() {
               key={item.code}
               type="button"
               aria-label={item.name}
+              aria-pressed={item.code === language}
               title={item.name}
-              className="relative h-9 w-9 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#6abf3c]/40"
-              onClick={() => handleLanguageChange(item.code)}
+              className={`relative h-9 w-9 overflow-hidden rounded-full border bg-white shadow-sm transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#6abf3c]/40 ${
+                item.code === language ? "border-[#2d6a2d] ring-2 ring-[#6abf3c]/35" : "border-[#dbe8d4]"
+              }`}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                handleLanguageChange(item.code);
+              }}
             >
               <Image
                 src={item.flagSrc}
