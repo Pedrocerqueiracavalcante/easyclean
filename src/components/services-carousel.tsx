@@ -53,7 +53,7 @@ export function ServicesCarousel() {
       <button
         type="button"
         aria-label="Voltar serviços"
-        className="absolute left-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-white text-[#2d6a2d] shadow-xl shadow-[#2d6a2d]/15 transition-all hover:scale-105 hover:bg-[#eef8e8] md:flex"
+        className="absolute left-6 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-white text-[#2d6a2d] shadow-xl shadow-[#2d6a2d]/15 transition-all hover:scale-105 hover:bg-[#eef8e8] md:flex"
         onClick={() => scrollServices("left")}
       >
         <ArrowLeft className="h-6 w-6" />
@@ -92,7 +92,7 @@ export function ServicesCarousel() {
       <button
         type="button"
         aria-label="Avançar serviços"
-        className="absolute right-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-[#2d6a2d] text-white shadow-xl shadow-[#2d6a2d]/20 transition-all hover:scale-105 hover:bg-[#245f2f] md:flex"
+        className="absolute right-6 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-[#2d6a2d] text-white shadow-xl shadow-[#2d6a2d]/20 transition-all hover:scale-105 hover:bg-[#245f2f] md:flex"
         onClick={() => scrollServices("right")}
       >
         <ArrowRight className="h-6 w-6" />
