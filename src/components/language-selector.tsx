@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 type LanguageCode = "pt" | "en" | "fr" | "de" | "es";
@@ -366,8 +366,9 @@ function translatePage(language: LanguageCode) {
 }
 
 export function LanguageSelector() {
-  const selectId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
   const storageKey = useMemo(() => "easyclean-language", []);
+  const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if (typeof window === "undefined") {
       return "pt";
@@ -387,17 +388,35 @@ export function LanguageSelector() {
     return () => observer.disconnect();
   }, [language]);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   function handleLanguageChange(nextLanguage: LanguageCode) {
     setLanguage(nextLanguage);
     window.localStorage.setItem(storageKey, nextLanguage);
     translatePage(nextLanguage);
+    setOpen(false);
   }
 
   const currentLanguage = languages.find((item) => item.code === language) ?? languages[0];
 
   return (
-    <div className="notranslate relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#dbe8d4] bg-white shadow-sm transition-shadow hover:shadow-md">
-      <div className="pointer-events-none flex items-center justify-center">
+    <div ref={containerRef} className="notranslate relative inline-flex">
+      <button
+        type="button"
+        aria-label={`Idioma atual: ${currentLanguage.name}`}
+        aria-expanded={open}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#dbe8d4] bg-white shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#6abf3c]/40"
+        onClick={() => setOpen((value) => !value)}
+      >
         <span className="relative h-6 w-6 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm" aria-hidden="true">
           <Image
             src={currentLanguage.flagSrc}
@@ -407,24 +426,30 @@ export function LanguageSelector() {
             className="object-cover"
           />
         </span>
-      </div>
-      <label htmlFor={selectId} className="sr-only">
-        Idioma do site
-      </label>
-      <select
-        id={selectId}
-        aria-label="Idioma do site"
-        title={currentLanguage.name}
-        className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-full bg-transparent opacity-0 outline-none"
-        value={language}
-        onChange={(event) => handleLanguageChange(event.target.value as LanguageCode)}
-      >
-        {languages.map((item) => (
-          <option key={item.code} value={item.code}>
-            {item.label} - {item.name}
-          </option>
-        ))}
-      </select>
+      </button>
+
+      {open ? (
+        <div className="absolute right-0 top-12 z-50 flex gap-2 rounded-full border border-[#dbe8d4] bg-white p-2 shadow-xl shadow-[#245f2f]/10">
+          {languages.map((item) => (
+            <button
+              key={item.code}
+              type="button"
+              aria-label={item.name}
+              title={item.name}
+              className="relative h-9 w-9 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#6abf3c]/40"
+              onClick={() => handleLanguageChange(item.code)}
+            >
+              <Image
+                src={item.flagSrc}
+                alt=""
+                fill
+                sizes="36px"
+                className="object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
