@@ -2,7 +2,6 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 
 type LanguageCode = "pt" | "en" | "fr" | "de" | "es";
 
@@ -397,19 +396,17 @@ export function LanguageSelector() {
   const currentLanguage = languages.find((item) => item.code === language) ?? languages[0];
 
   return (
-    <div className="notranslate relative inline-flex h-10 min-w-[92px] items-center rounded-full border border-[#dbe8d4] bg-white px-3 text-[#245f2f] shadow-sm transition-shadow hover:shadow-md">
-      <div className="pointer-events-none flex w-full items-center gap-2 pr-5">
-        <span className="relative h-5 w-5 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm" aria-hidden="true">
+    <div className="notranslate relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#dbe8d4] bg-white shadow-sm transition-shadow hover:shadow-md">
+      <div className="pointer-events-none flex items-center justify-center">
+        <span className="relative h-6 w-6 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm" aria-hidden="true">
           <Image
             src={currentLanguage.flagSrc}
             alt=""
             fill
-            sizes="20px"
+            sizes="24px"
             className="object-cover"
           />
         </span>
-        <span className="text-sm font-bold uppercase">{currentLanguage.label}</span>
-        <ChevronDown className="absolute right-3 h-4 w-4 text-[#2d6a2d]" aria-hidden="true" />
       </div>
       <label htmlFor={selectId} className="sr-only">
         Idioma do site
