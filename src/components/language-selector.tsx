@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 type LanguageCode = "pt" | "en" | "fr" | "de" | "es";
 
-const languages: { code: LanguageCode; label: string; flag: string; name: string }[] = [
-  { code: "pt", label: "PT", flag: "🇵🇹", name: "Português" },
-  { code: "en", label: "EN", flag: "🇬🇧", name: "English" },
-  { code: "fr", label: "FR", flag: "🇫🇷", name: "Français" },
-  { code: "de", label: "DE", flag: "🇩🇪", name: "Deutsch" },
-  { code: "es", label: "ES", flag: "🇪🇸", name: "Español" },
+const languages: { code: LanguageCode; label: string; flagSrc: string; name: string }[] = [
+  { code: "pt", label: "PT", flagSrc: "/flags/pt.svg", name: "Português" },
+  { code: "en", label: "EN", flagSrc: "/flags/en.svg", name: "English" },
+  { code: "fr", label: "FR", flagSrc: "/flags/fr.svg", name: "Français" },
+  { code: "de", label: "DE", flagSrc: "/flags/de.svg", name: "Deutsch" },
+  { code: "es", label: "ES", flagSrc: "/flags/es.svg", name: "Español" },
 ];
 
 const translations: Record<Exclude<LanguageCode, "pt">, Record<string, string>> = {
@@ -398,7 +399,15 @@ export function LanguageSelector() {
   return (
     <div className="notranslate relative inline-flex h-10 min-w-[92px] items-center rounded-full border border-[#dbe8d4] bg-white px-3 text-[#245f2f] shadow-sm transition-shadow hover:shadow-md">
       <div className="pointer-events-none flex w-full items-center gap-2 pr-5">
-        <span className="text-base leading-none" aria-hidden="true">{currentLanguage.flag}</span>
+        <span className="relative h-5 w-5 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm" aria-hidden="true">
+          <Image
+            src={currentLanguage.flagSrc}
+            alt=""
+            fill
+            sizes="20px"
+            className="object-cover"
+          />
+        </span>
         <span className="text-sm font-bold uppercase">{currentLanguage.label}</span>
         <ChevronDown className="absolute right-3 h-4 w-4 text-[#2d6a2d]" aria-hidden="true" />
       </div>
@@ -415,7 +424,7 @@ export function LanguageSelector() {
       >
         {languages.map((item) => (
           <option key={item.code} value={item.code}>
-            {item.flag} {item.label} - {item.name}
+            {item.label} - {item.name}
           </option>
         ))}
       </select>
