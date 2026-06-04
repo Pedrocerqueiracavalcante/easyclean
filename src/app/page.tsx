@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
+import { MobileInstallPrompt } from "@/components/mobile-install-prompt";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
@@ -135,6 +136,8 @@ export default function LandingPage() {
               <span className="rounded-full bg-white/90 px-4 py-2 shadow-sm ring-1 ring-[#dbe8d4]">Serviços por pedido</span>
               <span className="rounded-full bg-white/90 px-4 py-2 shadow-sm ring-1 ring-[#dbe8d4]">Acompanhamento online</span>
             </div>
+
+            <MobileInstallPrompt />
           </div>
         </div>
       </section>

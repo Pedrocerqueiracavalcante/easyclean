@@ -1,0 +1,21 @@
+{
+  "name": "Easy Clean Luxembourg",
+  "short_name": "Easy Clean",
+  "description": "Lavandaria ao domicilio com recolha, lavagem e entrega em casa.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#2d6a2d",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "lifestyle", "utilities"],
+  "lang": "pt"
+}
