@@ -81,10 +81,10 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
+            <div className="block">
               <LanguageSelector />
             </div>
-            <Link href="/login">
+            <Link href="/login" className="hidden sm:block">
               <Button variant="ghost" size="sm" className="text-[#245f2f] hover:bg-[#eef8e8]">
                 Entrar
               </Button>
