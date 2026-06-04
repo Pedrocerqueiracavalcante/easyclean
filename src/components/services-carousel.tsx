@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Droplets, Leaf, PackageCheck, Shirt, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Droplets, Leaf, PackageCheck, Shirt, Sparkles } from "lucide-react";
 import { servicePages } from "@/lib/service-pages";
 
 const serviceIconBySlug = {
@@ -14,9 +15,54 @@ const serviceIconBySlug = {
 };
 
 export function ServicesCarousel() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+
+  function scrollServices(direction: "left" | "right") {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const amount = Math.min(360, carousel.clientWidth * 0.85);
+    const nextLeft = direction === "left" ? carousel.scrollLeft - amount : carousel.scrollLeft + amount;
+    const maxLeft = carousel.scrollWidth - carousel.clientWidth;
+
+    carousel.scrollTo({
+      left: direction === "right" && nextLeft >= maxLeft - 8 ? 0 : Math.max(0, nextLeft),
+      behavior: "smooth",
+    });
+  }
+
+  useEffect(() => {
+    if (paused) return;
+
+    const timer = window.setInterval(() => {
+      scrollServices("right");
+    }, 3600);
+
+    return () => window.clearInterval(timer);
+  }, [paused]);
+
   return (
-    <div className="relative -mx-4 px-4">
-      <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div
+      className="relative -mx-4 px-4"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
+      <button
+        type="button"
+        aria-label="Voltar serviços"
+        className="absolute left-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-white text-[#2d6a2d] shadow-xl shadow-[#2d6a2d]/15 transition-all hover:scale-105 hover:bg-[#eef8e8] md:flex"
+        onClick={() => scrollServices("left")}
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
+
+      <div
+        ref={carouselRef}
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:px-12"
+      >
         {servicePages.map((service) => {
           const Icon = serviceIconBySlug[service.slug];
 
@@ -42,6 +88,15 @@ export function ServicesCarousel() {
           );
         })}
       </div>
+
+      <button
+        type="button"
+        aria-label="Avançar serviços"
+        className="absolute right-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[#dbe8d4] bg-[#2d6a2d] text-white shadow-xl shadow-[#2d6a2d]/20 transition-all hover:scale-105 hover:bg-[#245f2f] md:flex"
+        onClick={() => scrollServices("right")}
+      >
+        <ArrowRight className="h-6 w-6" />
+      </button>
     </div>
   );
 }
