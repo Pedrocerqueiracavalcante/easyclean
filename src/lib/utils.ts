@@ -37,11 +37,11 @@ export function generateId() {
 export const ORDER_STATUS_LABELS: Record<string, string> = {
   pending: "Pendente",
   confirmed: "Confirmado",
-  pickup_scheduled: "Recolha Agendada",
+  pickup_scheduled: "Recolha agendada",
   picked_up: "Recolhido",
-  washing: "Em Lavagem",
+  washing: "Em lavagem",
   ready: "Pronto",
-  delivery_scheduled: "Entrega Agendada",
+  delivery_scheduled: "Entrega agendada",
   delivered: "Entregue",
   cancelled: "Cancelado",
 };

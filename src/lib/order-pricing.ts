@@ -1,10 +1,10 @@
 export const orderServices = [
   { id: "wash", name: "Lavagem", price: 4 },
-  { id: "iron", name: "Passar a Ferro", price: 2 },
-  { id: "dry", name: "Limpeza a Seco", price: 8 },
-  { id: "bed", name: "Roupas de Cama", price: 6 },
+  { id: "iron", name: "Passagem a ferro", price: 2 },
+  { id: "dry", name: "Limpeza a seco", price: 8 },
+  { id: "bed", name: "Roupas de cama", price: 6 },
   { id: "shoes", name: "Calçado", price: 5 },
-  { id: "bag", name: "Saco Completo", price: 29 },
+  { id: "bag", name: "Saco completo", price: 29 },
 ] as const;
 
 export type OrderServiceId = (typeof orderServices)[number]["id"];

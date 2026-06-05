@@ -30,18 +30,18 @@ export function statusLabel(status: string) {
 
 export async function getOrdersOverview(db: ReturnType<typeof getDb>, limit = 50) {
   const rows = await db.select().from(orders).orderBy(desc(orders.createdAt)).limit(limit);
-  const ids = rows.map((order) => order.id);
-  const itemRows = ids.length
-    ? await db.select().from(orderItems).where(eq(orderItems.orderId, ids[0]))
-    : [];
 
   return Promise.all(
     rows.map(async (order) => {
-      const items = ids.length === 1 ? itemRows : await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
+      const [items, user, address] = await Promise.all([
+        db.select().from(orderItems).where(eq(orderItems.orderId, order.id)),
+        db.query.users.findFirst({ where: eq(users.id, order.userId) }),
+        db.query.addresses.findFirst({ where: eq(addresses.id, order.addressId) }),
+      ]);
+
       const firstItems = items.slice(0, 2).map((item) => `${item.quantity}x ${serviceName(item.serviceId)}`);
-      const itemsText = firstItems.length ? firstItems.join(" · ") : "Sem itens";
-      const user = await db.query.users.findFirst({ where: eq(users.id, order.userId) });
-      const address = await db.query.addresses.findFirst({ where: eq(addresses.id, order.addressId) });
+      const moreItems = items.length > 2 ? ` +${items.length - 2}` : "";
+      const itemsText = firstItems.length ? `${firstItems.join(" · ")}${moreItems}` : "Sem itens";
 
       return {
         ...order,
@@ -49,6 +49,7 @@ export async function getOrdersOverview(db: ReturnType<typeof getDb>, limit = 50
         clientEmail: user?.email ?? "",
         clientPhone: user?.phone ?? "",
         addressText: address ? `${address.street} ${address.number}, ${address.city}` : "Morada não definida",
+        itemsCount: items.length,
         itemsText,
         totalText: formatCurrency(order.total),
         createdText: formatDateTime(order.createdAt),
