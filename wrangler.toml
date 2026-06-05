@@ -16,3 +16,4 @@ migrations_dir = "drizzle/migrations"
 
 [vars]
 NEXT_PUBLIC_APP_URL = "https://easyclean.cerqueirapedro275.workers.dev"
+BETTER_AUTH_URL = "https://easyclean.cerqueirapedro275.workers.dev"

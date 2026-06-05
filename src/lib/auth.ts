@@ -6,6 +6,8 @@ import { sendPasswordResetEmail } from "@/lib/email";
 
 export function createAuth(db: D1Database) {
   return betterAuth({
+    baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
+    secret: process.env.BETTER_AUTH_SECRET,
     database: drizzleAdapter(getDb(db), {
       provider: "sqlite",
       schema: {
