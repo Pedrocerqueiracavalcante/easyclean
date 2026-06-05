@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Apple } from "lucide-react";
+import { Apple, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "@/lib/auth-client";
@@ -73,7 +73,7 @@ export default function LoginPage() {
       window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
       router.push("/app/home");
     } catch {
-      setMessage("Email ou senha inválidos. Tenta novamente.");
+      setMessage("Email ou senha invalidos. Tenta novamente.");
     } finally {
       setLoading(false);
     }
@@ -108,11 +108,33 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="rounded-3xl border border-[#dbe8d4] bg-white p-8 shadow-xl shadow-[#2d6a2d]/8">
-        <h1 className="text-2xl font-bold text-gray-900">Bem-vindo de volta</h1>
-        <p className="mt-1 text-sm text-gray-500">Entra na tua conta Easy Clean.</p>
+      <div className="mb-5 rounded-[28px] border border-[#dbe8d4] bg-white/85 p-4 shadow-sm backdrop-blur">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2D6A2D] text-white">
+            <Sparkles className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-sm font-black text-gray-950">Area do cliente</p>
+            <p className="text-xs text-gray-500">Pedidos, moradas, pagamentos e perfil num so lugar.</p>
+          </div>
+        </div>
+      </div>
 
-        <div className="mt-8 grid grid-cols-3 gap-3">
+      <div className="rounded-[32px] border border-[#dbe8d4] bg-white p-6 shadow-2xl shadow-[#2d6a2d]/10 sm:p-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="mb-2 inline-flex rounded-full bg-[#eef8e8] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#2D6A2D]">
+              Login seguro
+            </p>
+            <h1 className="text-2xl font-black text-gray-950">Bem-vindo de volta</h1>
+            <p className="mt-1 text-sm text-gray-500">Entra na tua conta Easy Clean.</p>
+          </div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f7fbf4] text-[#2D6A2D] ring-1 ring-[#dbe8d4]">
+            <ShieldCheck className="h-6 w-6" />
+          </div>
+        </div>
+
+        <div className="mt-7 grid grid-cols-3 gap-3">
           {socialAuthProviders.map((item) => (
             <button
               key={item.provider}
@@ -120,7 +142,7 @@ export default function LoginPage() {
               onClick={() => handleSocial(item.provider)}
               aria-label={`Continuar com ${item.label}`}
               disabled={socialLoading === item.provider}
-              className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-white text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:shadow-md disabled:opacity-60"
+              className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-[#fbfdf9] text-xs font-bold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:bg-white hover:shadow-md disabled:opacity-60"
             >
               {item.status === "soon" && (
                 <span className="absolute right-1.5 top-1.5 rounded-full bg-[#eef8e8] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#2D6A2D]">
@@ -128,12 +150,12 @@ export default function LoginPage() {
                 </span>
               )}
               <SocialIcon provider={item.provider} />
-              {item.label}
+              {socialLoading === item.provider ? "Abrindo" : item.label}
             </button>
           ))}
         </div>
         <p className="mt-3 text-center text-xs leading-5 text-gray-400">
-          Google será ativado assim que as credenciais OAuth forem configuradas.
+          Google sera ativado assim que as credenciais OAuth forem configuradas.
         </p>
 
         <div className="my-6 flex items-center gap-3">
@@ -157,19 +179,30 @@ export default function LoginPage() {
             label="Senha"
             type="password"
             autoComplete="current-password"
-            placeholder="Mínimo 8 caracteres"
+            placeholder="Minimo 8 caracteres"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <p className="text-xs text-gray-400">O email válido fica salvo automaticamente neste dispositivo.</p>
+
+          <div className="grid gap-2 rounded-2xl bg-[#f8faf7] p-3 text-xs text-gray-500">
+            <p className="flex items-center gap-2">
+              <Mail className="h-3.5 w-3.5 text-[#2D6A2D]" />
+              O email valido fica salvo automaticamente neste dispositivo.
+            </p>
+            <p className="flex items-center gap-2">
+              <LockKeyhole className="h-3.5 w-3.5 text-[#2D6A2D]" />
+              Usa sempre uma senha com pelo menos 8 caracteres.
+            </p>
+          </div>
+
           {message && (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
             </div>
           )}
           <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-[#2D6A2D] hover:underline">
+            <Link href="/forgot-password" className="text-xs font-semibold text-[#2D6A2D] hover:underline">
               Esqueceste a senha?
             </Link>
           </div>
@@ -179,9 +212,9 @@ export default function LoginPage() {
         </form>
       </div>
       <p className="mt-6 text-center text-sm text-gray-500">
-        Não tens conta?{" "}
+        Nao tens conta?{" "}
         <Link href="/register" className="font-semibold text-[#2D6A2D] hover:underline">
-          Regista-te grátis
+          Regista-te gratis
         </Link>
       </p>
     </div>
