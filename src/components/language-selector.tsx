@@ -562,6 +562,54 @@ for (const code of ["en", "fr", "de", "es"] as const) {
 }
 
 Object.assign(translations.en, {
+  "Luxembourg · recolha e entrega em casa": "Luxembourg · pickup and home delivery",
+  "Cria conta": "Create account",
+  "Guarda os teus dados.": "Save your details.",
+  "Escolhe dia e horário.": "Choose day and time.",
+  "Lavamos": "We wash",
+  "Tratamos a roupa.": "We care for the laundry.",
+  "Entregamos": "We deliver",
+  "Tudo pronto em casa.": "Everything ready at home.",
+  "WhatsApp": "WhatsApp",
+});
+
+Object.assign(translations.fr, {
+  "Luxembourg · recolha e entrega em casa": "Luxembourg · collecte et livraison à domicile",
+  "Cria conta": "Créer un compte",
+  "Guarda os teus dados.": "Enregistrez vos informations.",
+  "Escolhe dia e horário.": "Choisissez le jour et l'horaire.",
+  "Lavamos": "Nous lavons",
+  "Tratamos a roupa.": "Nous prenons soin du linge.",
+  "Entregamos": "Nous livrons",
+  "Tudo pronto em casa.": "Tout est prêt à domicile.",
+  "WhatsApp": "WhatsApp",
+});
+
+Object.assign(translations.de, {
+  "Luxembourg · recolha e entrega em casa": "Luxembourg · Abholung und Lieferung nach Hause",
+  "Cria conta": "Konto erstellen",
+  "Guarda os teus dados.": "Speichern Sie Ihre Daten.",
+  "Escolhe dia e horário.": "Wählen Sie Tag und Uhrzeit.",
+  "Lavamos": "Wir waschen",
+  "Tratamos a roupa.": "Wir pflegen die Wäsche.",
+  "Entregamos": "Wir liefern",
+  "Tudo pronto em casa.": "Alles fertig zu Hause.",
+  "WhatsApp": "WhatsApp",
+});
+
+Object.assign(translations.es, {
+  "Luxembourg · recolha e entrega em casa": "Luxembourg · recogida y entrega en casa",
+  "Cria conta": "Crea una cuenta",
+  "Guarda os teus dados.": "Guarda tus datos.",
+  "Escolhe dia e horário.": "Elige día y horario.",
+  "Lavamos": "Lavamos",
+  "Tratamos a roupa.": "Cuidamos la ropa.",
+  "Entregamos": "Entregamos",
+  "Tudo pronto em casa.": "Todo listo en casa.",
+  "WhatsApp": "WhatsApp",
+});
+
+Object.assign(translations.en, {
   "Confiança": "Trust",
   "Por que escolher a Easy Clean?": "Why choose Easy Clean?",
   "A equipa recolhe e devolve na morada combinada.": "The team picks up and returns at the agreed address.",

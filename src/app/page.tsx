@@ -4,7 +4,11 @@ import {
   CalendarDays,
   ChevronDown,
   Droplets,
+  Mail,
+  MapPin,
+  MessageCircle,
   PackageCheck,
+  Phone,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +29,7 @@ const contactInfo = {
   email: "Adicionar email",
   phone: "Adicionar telefone",
   hours: "Segunda a sábado · 08h às 19h",
+  whatsappNumber: "",
 };
 
 export default function LandingPage() {
@@ -97,6 +102,11 @@ export default function LandingPage() {
 
         <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center px-4 py-16 md:grid-cols-[0.9fr_1.1fr]">
           <div className="max-w-2xl">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#dbe8d4] bg-white/90 px-4 py-2 text-sm font-bold text-[#245f2f] shadow-sm">
+              <MapPin className="h-4 w-4 text-[#2d6a2d]" />
+              <span>Luxembourg · recolha e entrega em casa</span>
+            </div>
+
             <h1 className="mb-6 text-5xl font-black leading-[0.95] tracking-tight text-[#102316] md:text-7xl">
               Roupa limpa,
               <span className="block text-[#2d6a2d]">sem perder tempo.</span>
@@ -178,7 +188,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="bg-[#071108] py-12 text-white/56">
+      <footer id="contacto" className="bg-[#071108] py-12 text-white/56">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-4">
           <div>
             <div className="mb-4 inline-flex rounded bg-white p-2">
@@ -213,12 +223,32 @@ export default function LandingPage() {
 
           <div>
             <h4 className="mb-3 font-semibold text-white">Contacto</h4>
-            <ul className="space-y-2 text-sm">
-              <li>{contactInfo.email}</li>
-              <li>{contactInfo.phone}</li>
-              <li>{contactInfo.location}</li>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-[#b9f25a]" />
+                <span>{contactInfo.email}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-[#b9f25a]" />
+                <span>{contactInfo.phone}</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-[#b9f25a]" />
+                <span>{contactInfo.location}</span>
+              </li>
               <li>{contactInfo.hours}</li>
             </ul>
+            <a
+              href={
+                contactInfo.whatsappNumber
+                  ? `https://wa.me/${contactInfo.whatsappNumber}`
+                  : "#contacto"
+              }
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25d366] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-black/20 transition-transform hover:-translate-y-0.5"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
           </div>
         </div>
 
