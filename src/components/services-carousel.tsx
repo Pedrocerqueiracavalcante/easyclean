@@ -76,10 +76,10 @@ export function ServicesCarousel() {
               <div className="relative mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6abf3c] to-[#2d6a2d] text-white shadow-lg shadow-[#2d6a2d]/20 ring-4 ring-[#eef8e8]">
                 <Icon className="h-8 w-8 stroke-[2.4]" />
               </div>
-              <h3 className="mb-2 font-semibold text-[#102316]">{service.title}</h3>
-              <p className="mb-4 min-h-[72px] text-sm leading-6 text-[#64748b]">{service.subtitle}</p>
+              <h3 className="mb-2 text-lg font-bold text-[#102316]">{service.title}</h3>
+              <p className="mb-5 min-h-[48px] text-sm leading-6 text-[#64748b]">{service.subtitle}</p>
               <div className="flex items-center justify-between gap-3 border-t border-[#e2e8df] pt-4">
-                <span className="text-sm font-bold text-[#2d6a2d]">{service.price}</span>
+                <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-sm font-bold text-[#2d6a2d]">{service.price}</span>
                 <span className="text-xs font-bold uppercase tracking-widest text-[#94a3b8] transition-colors group-hover:text-[#2d6a2d]">
                   Ver guia
                 </span>

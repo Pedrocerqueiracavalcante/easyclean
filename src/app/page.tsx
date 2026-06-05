@@ -1,14 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  BadgeCheck,
   CalendarDays,
   ChevronDown,
   Droplets,
-  HelpCircle,
-  MessageCircle,
   PackageCheck,
-  ShieldCheck,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,36 +14,10 @@ import { ServicesCarousel } from "@/components/services-carousel";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
-  { n: "01", title: "Criar conta", desc: "Regista-te para guardar os teus dados e morada.", icon: CalendarDays },
-  { n: "02", title: "Agendar recolha", desc: "Escolhe o serviço e o horário ideal.", icon: Truck },
-  { n: "03", title: "Tratamento da roupa", desc: "A roupa é lavada, seca e organizada com cuidado.", icon: Droplets },
-  { n: "04", title: "Entrega em casa", desc: "Recebe tudo pronto para usar.", icon: PackageCheck },
-];
-
-const trustItems = [
-  { title: "Recolha em casa", desc: "A equipa recolhe e devolve na morada combinada.", icon: Truck },
-  { title: "Pagamento seguro", desc: "Fluxo preparado para pedidos online com conta do cliente.", icon: ShieldCheck },
-  { title: "Suporte direto", desc: "Contacto simples para dúvidas, horários e pedidos especiais.", icon: MessageCircle },
-  { title: "Serviço organizado", desc: "Pedidos, serviços e entregas pensados para acompanhamento online.", icon: BadgeCheck },
-];
-
-const faqs = [
-  {
-    question: "Como funciona a recolha?",
-    answer: "O cliente cria conta, informa a morada e agenda a recolha. A roupa é tratada e depois devolvida em casa.",
-  },
-  {
-    question: "Quanto tempo demora?",
-    answer: "O prazo depende do tipo de serviço e volume da roupa. A confirmação pode ser feita antes do pedido.",
-  },
-  {
-    question: "Como faço o pedido?",
-    answer: "Basta criar conta ou entrar no app, escolher o serviço e acompanhar o estado do pedido online.",
-  },
-  {
-    question: "Atendem minha zona?",
-    answer: "O atendimento é focado em Luxembourg. A disponibilidade da morada pode ser confirmada no contacto.",
-  },
+  { n: "01", title: "Cria conta", desc: "Guarda os teus dados.", icon: CalendarDays },
+  { n: "02", title: "Agenda", desc: "Escolhe dia e horário.", icon: Truck },
+  { n: "03", title: "Lavamos", desc: "Tratamos a roupa.", icon: Droplets },
+  { n: "04", title: "Entregamos", desc: "Tudo pronto em casa.", icon: PackageCheck },
 ];
 
 const contactInfo = {
@@ -186,30 +156,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-12 max-w-2xl">
-            <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Confiança</p>
-            <h2 className="text-3xl font-bold text-[#102316] md:text-4xl">Por que escolher a Easy Clean?</h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-4">
-            {trustItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-[#6abf3c] hover:bg-white hover:shadow-lg hover:shadow-[#2d6a2d]/10">
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#2d6a2d] shadow-sm ring-1 ring-[#dbe8d4]">
-                    <Icon className="h-7 w-7 stroke-[2.3]" />
-                  </div>
-                  <h3 className="mb-2 font-semibold text-[#102316]">{item.title}</h3>
-                  <p className="text-sm leading-6 text-[#64748b]">{item.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       <section id="servicos" className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
@@ -228,27 +174,6 @@ export default function LandingPage() {
                 Criar conta para pedir
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#f7fbf4] py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Dúvidas frequentes</p>
-            <h2 className="text-3xl font-bold text-[#102316] md:text-4xl">Antes de pedir</h2>
-          </div>
-
-          <div className="mx-auto grid max-w-4xl gap-4 md:grid-cols-2">
-            {faqs.map((faq) => (
-              <div key={faq.question} className="rounded-xl border border-[#dbe8d4] bg-white p-6 shadow-sm">
-                <div className="mb-3 flex items-center gap-3">
-                  <HelpCircle className="h-5 w-5 shrink-0 text-[#2d6a2d]" />
-                  <h3 className="font-semibold text-[#102316]">{faq.question}</h3>
-                </div>
-                <p className="text-sm leading-6 text-[#64748b]">{faq.answer}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
