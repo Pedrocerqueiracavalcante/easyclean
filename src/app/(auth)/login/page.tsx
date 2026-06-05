@@ -3,15 +3,18 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Apple } from "lucide-react";
+import { Apple, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "@/lib/auth-client";
+import { isValidEmail } from "@/lib/email-validation";
 import {
   getSocialAuthMessage,
   socialAuthProviders,
   type SocialProvider,
 } from "@/lib/social-auth";
+
+const rememberedEmailKey = "easyclean:remembered-email";
 
 function SocialIcon({ provider }: { provider: SocialProvider }) {
   if (provider === "google") {
@@ -42,18 +45,37 @@ function SocialIcon({ provider }: { provider: SocialProvider }) {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return window.localStorage.getItem(rememberedEmailKey) ?? "";
+  });
   const [password, setPassword] = useState("");
+  const [rememberEmail, setRememberEmail] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return Boolean(window.localStorage.getItem(rememberedEmailKey));
+  });
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<SocialProvider | "">("");
   const [message, setMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!isValidEmail(normalizedEmail)) {
+      setMessage("Escreve um email válido para continuar.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
     try {
-      await signIn.email({ email, password });
+      await signIn.email({ email: normalizedEmail, password });
+      if (rememberEmail) {
+        window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
+      } else {
+        window.localStorage.removeItem(rememberedEmailKey);
+      }
       router.push("/app/home");
     } catch {
       setMessage("Email ou senha inválidos. Tenta novamente.");
@@ -125,10 +147,12 @@ export default function LoginPage() {
           <div className="h-px flex-1 bg-[#e2e8df]" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <Input
             label="Email"
             type="email"
+            inputMode="email"
+            autoComplete="email"
             placeholder="nome@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -137,11 +161,27 @@ export default function LoginPage() {
           <Input
             label="Senha"
             type="password"
+            autoComplete="current-password"
             placeholder="Mínimo 8 caracteres"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-[#e2e8df] bg-[#fbfdf9] px-4 py-3 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              checked={rememberEmail}
+              onChange={(e) => setRememberEmail(e.target.checked)}
+              className="sr-only"
+            />
+            <span className={`flex h-5 w-5 items-center justify-center rounded-md border ${rememberEmail ? "border-[#2D6A2D] bg-[#2D6A2D] text-white" : "border-[#cbd5c0] bg-white text-transparent"}`}>
+              <Check className="h-3.5 w-3.5" />
+            </span>
+            <span className="flex-1">
+              <span className="block font-semibold text-gray-800">Manter email salvo</span>
+              <span className="block text-xs text-gray-400">Na próxima entrada, o email já aparece preenchido.</span>
+            </span>
+          </label>
           {message && (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}

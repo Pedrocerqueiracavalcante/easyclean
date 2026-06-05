@@ -7,6 +7,7 @@ import { Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signUp, signIn } from "@/lib/auth-client";
+import { isValidEmail } from "@/lib/email-validation";
 import {
   getSocialAuthMessage,
   socialAuthProviders,
@@ -54,6 +55,13 @@ export default function RegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const normalizedEmail = form.email.trim().toLowerCase();
+
+    if (!isValidEmail(normalizedEmail)) {
+      setMessage("Escreve um email válido para criar a conta.");
+      return;
+    }
+
     if (form.password.length < 8) {
       setMessage("A senha deve ter pelo menos 8 caracteres.");
       return;
@@ -61,7 +69,7 @@ export default function RegisterPage() {
     setLoading(true);
     setMessage("");
     try {
-      await signUp.email({ name: form.name, email: form.email, password: form.password });
+      await signUp.email({ name: form.name.trim(), email: normalizedEmail, password: form.password });
       router.push("/onboarding");
     } catch {
       setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
@@ -133,11 +141,20 @@ export default function RegisterPage() {
           <div className="h-px flex-1 bg-[#e2e8df]" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <Input label="Nome completo" placeholder="Maria Santos" value={form.name} onChange={set("name")} required />
-          <Input label="Email" type="email" placeholder="maria@email.com" value={form.email} onChange={set("email")} required />
+          <Input
+            label="Email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="maria@email.com"
+            value={form.email}
+            onChange={set("email")}
+            required
+          />
           <Input label="Telefone" type="tel" placeholder="+352 621 000 000" value={form.phone} onChange={set("phone")} />
-          <Input label="Senha" type="password" placeholder="Mínimo 8 caracteres" value={form.password} onChange={set("password")} required />
+          <Input label="Senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={form.password} onChange={set("password")} required />
           {message && (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
