@@ -111,3 +111,36 @@ export async function sendOrderStatusUpdate(
     `,
   });
 }
+
+export async function sendPasswordResetEmail(email: string, name: string, resetUrl: string) {
+  if (!canSendEmail()) {
+    return null;
+  }
+
+  return getResend().emails.send({
+    from: process.env.RESEND_FROM_EMAIL!,
+    to: email,
+    subject: "Recuperar senha — Easy Clean",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff">
+        <div style="background:#2D6A2D;padding:32px;text-align:center;border-radius:18px 18px 0 0">
+          <h1 style="color:white;margin:0;font-size:28px">Easy Clean</h1>
+          <p style="color:#dff5d7;margin:8px 0 0">Recuperação de senha</p>
+        </div>
+        <div style="padding:32px;color:#1f2937">
+          <h2 style="margin:0 0 12px">Olá ${name || "cliente"},</h2>
+          <p style="line-height:1.6;color:#4b5563">
+            Recebemos um pedido para redefinir a senha da tua conta Easy Clean.
+          </p>
+          <a href="${resetUrl}"
+            style="display:inline-block;background:#2D6A2D;color:white;padding:13px 22px;border-radius:10px;text-decoration:none;font-weight:700;margin:18px 0">
+            Criar nova senha
+          </a>
+          <p style="line-height:1.6;color:#6b7280;font-size:14px">
+            Se não foste tu, podes ignorar este email. O link expira automaticamente.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}

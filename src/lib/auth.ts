@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 export function createAuth(db: D1Database) {
   return betterAuth({
@@ -17,6 +18,10 @@ export function createAuth(db: D1Database) {
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
+      sendResetPassword: async ({ user, url }) => {
+        await sendPasswordResetEmail(user.email, user.name, url);
+      },
+      resetPasswordTokenExpiresIn: 60 * 60,
     },
     socialProviders: {
       google: {

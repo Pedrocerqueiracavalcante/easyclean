@@ -7,7 +7,6 @@ import { Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signUp, signIn } from "@/lib/auth-client";
-import { isValidEmail } from "@/lib/email-validation";
 import {
   getSocialAuthMessage,
   socialAuthProviders,
@@ -56,11 +55,6 @@ export default function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const normalizedEmail = form.email.trim().toLowerCase();
-
-    if (!isValidEmail(normalizedEmail)) {
-      setMessage("Escreve um email válido para criar a conta.");
-      return;
-    }
 
     if (form.password.length < 8) {
       setMessage("A senha deve ter pelo menos 8 caracteres.");
@@ -141,7 +135,7 @@ export default function RegisterPage() {
           <div className="h-px flex-1 bg-[#e2e8df]" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input label="Nome completo" placeholder="Maria Santos" value={form.name} onChange={set("name")} required />
           <Input
             label="Email"
