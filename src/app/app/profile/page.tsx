@@ -5,7 +5,9 @@ import { redirect } from "next/navigation";
 import { count, eq } from "drizzle-orm";
 import {
   Bell,
+  CalendarPlus,
   ChevronRight,
+  CreditCard,
   Globe2,
   Headphones,
   Languages,
@@ -32,6 +34,12 @@ const menuItems = [
   { href: "/app/profile/support", icon: Headphones, label: "Suporte", desc: "Fala com a Easy Clean" },
 ];
 
+const quickActions = [
+  { href: "/app/order", icon: CalendarPlus, label: "Novo pedido", desc: "Agendar recolha" },
+  { href: "/app/orders", icon: PackageCheck, label: "Acompanhar", desc: "Ver estado" },
+  { href: "/app/profile/addresses", icon: MapPin, label: "Moradas", desc: "Editar locais" },
+];
+
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
@@ -52,10 +60,30 @@ export default async function ProfilePage() {
 
   const displayName = user?.name ?? session.user.name ?? "Cliente Easy Clean";
   const displayEmail = user?.email ?? session.user.email ?? "Adiciona os teus dados no registo";
+  const hasPhoto = Boolean(user?.image);
 
   return (
     <div className="space-y-5">
       <ProfilePhotoUploader name={displayName} email={displayEmail} image={user?.image} />
+
+      <section className="grid gap-3 sm:grid-cols-3">
+        {quickActions.map((action) => {
+          const Icon = action.icon;
+          return (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="group rounded-[22px] border border-[#dce9d7] bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-md"
+            >
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/20 transition-transform group-hover:scale-105">
+                <Icon className="h-5 w-5" />
+              </div>
+              <p className="text-sm font-black text-gray-950">{action.label}</p>
+              <p className="mt-1 text-xs text-gray-500">{action.desc}</p>
+            </Link>
+          );
+        })}
+      </section>
 
       <div className="grid grid-cols-3 gap-3">
         {[
@@ -92,10 +120,24 @@ export default async function ProfilePage() {
             <p className="mt-1 truncate text-sm font-bold text-gray-900">{displayEmail}</p>
           </div>
           <div className="rounded-2xl bg-[#f8faf7] p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-gray-400">Perfil</p>
+            <p className="mt-1 flex items-center gap-2 text-sm font-bold text-gray-900">
+              <ShieldCheck className="h-4 w-4 text-[#2D6A2D]" />
+              {hasPhoto ? "Foto adicionada" : "Foto pendente"}
+            </p>
+          </div>
+          <div className="rounded-2xl bg-[#f8faf7] p-4">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-gray-400">Pagamento</p>
             <p className="mt-1 flex items-center gap-2 text-sm font-bold text-gray-900">
               <WalletCards className="h-4 w-4 text-[#2D6A2D]" />
               Cartao pronto para pedidos
+            </p>
+          </div>
+          <div className="rounded-2xl bg-[#f8faf7] p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-gray-400">Seguranca</p>
+            <p className="mt-1 flex items-center gap-2 text-sm font-bold text-gray-900">
+              <CreditCard className="h-4 w-4 text-[#2D6A2D]" />
+              Conta protegida
             </p>
           </div>
         </div>
@@ -107,15 +149,15 @@ export default async function ProfilePage() {
             const Icon = item.icon;
             return (
               <Link key={item.href} href={item.href}>
-                <div className={`flex items-center gap-3 px-5 py-4 transition-colors hover:bg-[#f8faf7] ${index < menuItems.length - 1 ? "border-b border-[#e2e8df]" : ""}`}>
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
+                <div className={`group flex items-center gap-3 px-5 py-4 transition-colors hover:bg-[#f8faf7] ${index < menuItems.length - 1 ? "border-b border-[#e2e8df]" : ""}`}>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition-colors group-hover:bg-[#2D6A2D] group-hover:text-white">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-bold text-gray-900">{item.label}</p>
                     <p className="truncate text-xs text-gray-400">{item.desc}</p>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-gray-300" />
+                  <ChevronRight className="h-4 w-4 text-gray-300 transition-transform group-hover:translate-x-0.5 group-hover:text-[#2D6A2D]" />
                 </div>
               </Link>
             );
