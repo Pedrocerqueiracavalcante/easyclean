@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 export default function OnboardingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     label: "Casa",
     street: "",
@@ -25,14 +26,19 @@ export default function OnboardingPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setError("");
     try {
-      await fetch("/api/addresses", {
+      const res = await fetch("/api/addresses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, isDefault: true }),
       });
+      if (!res.ok) {
+        throw new Error("Erro ao guardar morada.");
+      }
       router.push("/app/home");
     } catch {
+      setError("Não foi possível guardar a morada. Confirma os dados e tenta novamente.");
       setLoading(false);
     }
   }
@@ -41,7 +47,7 @@ export default function OnboardingPage() {
     <div className="w-full max-w-lg">
       <div className="text-center mb-8">
         <div className="text-4xl mb-3">📍</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Onde morares?</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Onde moras?</h1>
         <p className="text-gray-500 text-sm">
           Adiciona o teu endereço para que possamos ir buscar a roupa.
         </p>
@@ -84,6 +90,12 @@ export default function OnboardingPage() {
           </div>
 
           <Input label="Cidade" placeholder="Luxembourg" value={form.city} onChange={set("city")} required />
+
+          {error ? (
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </div>
+          ) : null}
 
           <div className="pt-2">
             <Button type="submit" className="w-full" size="lg" loading={loading}>

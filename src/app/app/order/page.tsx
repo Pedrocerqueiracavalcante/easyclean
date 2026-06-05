@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -19,15 +19,20 @@ const timeSlots = [
   "14:00 - 16:00", "16:00 - 18:00", "18:00 - 20:00",
 ];
 
-const days = [
-  { label: "Hoje", date: "Seg 2 Jun" },
-  { label: "Amanhã", date: "Ter 3 Jun" },
-  { label: "", date: "Qua 4 Jun" },
-  { label: "", date: "Qui 5 Jun" },
-  { label: "", date: "Sex 6 Jun" },
-];
-
 type Step = "services" | "schedule" | "confirm";
+
+type Address = {
+  id: string;
+  userId: string;
+  label: string;
+  street: string;
+  number: string;
+  floor?: string | null;
+  postalCode: string;
+  city: string;
+  country: string;
+  isDefault?: boolean | null;
+};
 
 export default function OrderPage() {
   const router = useRouter();
@@ -39,6 +44,37 @@ export default function OrderPage() {
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [coupon, setCoupon] = useState("");
+  const [addresses, setAddresses] = useState<Address[]>([]);
+
+  const days = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat("pt-PT", { weekday: "short", day: "numeric", month: "short" });
+
+    return Array.from({ length: 5 }, (_, index) => {
+      const date = new Date();
+      date.setDate(date.getDate() + index);
+
+      return {
+        label: index === 0 ? "Hoje" : index === 1 ? "Amanhã" : "",
+        date: formatter.format(date).replace(".", ""),
+      };
+    });
+  }, []);
+
+  const selectedAddress = addresses.find((address) => address.isDefault) ?? addresses[0];
+  const selectedAddressText = selectedAddress
+    ? `${selectedAddress.street} ${selectedAddress.number}, ${selectedAddress.city}`
+    : "Adiciona uma morada antes de pagar.";
+
+  useEffect(() => {
+    fetch("/api/addresses")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setAddresses(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   function change(id: string, delta: number) {
     setQuantities((q) => {
@@ -60,11 +96,25 @@ export default function OrderPage() {
     setLoading(true);
     setPaymentError("");
 
+    if (!selectedAddress) {
+      setPaymentError("Adiciona uma morada antes de confirmar o pedido.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: quantities, pickupDay, pickupSlot, notes, coupon }),
+        body: JSON.stringify({
+          items: quantities,
+          pickupDay,
+          pickupSlot,
+          notes,
+          coupon,
+          addressId: selectedAddress?.id,
+          userId: selectedAddress?.userId,
+        }),
       });
 
       const data = await res.json() as { id?: string; checkoutUrl?: string; error?: string };
@@ -205,7 +255,7 @@ export default function OrderPage() {
           <Card>
             <div className="p-4 border-b border-[#e2e8df]">
               <p className="text-xs text-gray-400 mb-1">📍 Endereço de recolha</p>
-              <p className="text-sm font-medium text-gray-800">Rue de la Gare 42, Luxembourg</p>
+              <p className="text-sm font-medium text-gray-800">{selectedAddressText}</p>
             </div>
             <div className="p-4 border-b border-[#e2e8df]">
               <p className="text-xs text-gray-400 mb-1">🕐 Recolha</p>
