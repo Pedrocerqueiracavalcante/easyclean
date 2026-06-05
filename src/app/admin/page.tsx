@@ -1,143 +1,114 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { count } from "drizzle-orm";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDb } from "@/lib/db";
+import { orders, users } from "@/lib/db/schema";
+import { getOrdersOverview } from "@/lib/order-data";
+import { formatCurrency } from "@/lib/utils";
 
-const stats = [
-  { label: "Pedidos Hoje", value: "8", delta: "+2 vs ontem", color: "text-[#2D6A2D]" },
-  { label: "Em Lavagem", value: "3", delta: "Activos agora", color: "text-blue-600" },
-  { label: "Receita (Mês)", value: "€2.340", delta: "+18% vs mês anterior", color: "text-[#2D6A2D]" },
-  { label: "Clientes Activos", value: "47", delta: "12 com subscrição", color: "text-purple-600" },
-];
+export const dynamic = "force-dynamic";
 
-const recentOrders = [
-  { id: "abc123", client: "Maria Santos", status: "washing", items: "8 kg + ferro", total: 38, time: "10:30" },
-  { id: "def456", client: "João Silva", status: "pickup_scheduled", items: "Saco completo", total: 29, time: "09:15" },
-  { id: "ghi789", client: "Ana Costa", status: "ready", items: "5 kg lavagem", total: 20, time: "08:00" },
-  { id: "jkl012", client: "Pedro Nunes", status: "confirmed", items: "Limpeza a seco × 2", total: 16, time: "07:45" },
-];
+export default async function AdminDashboard() {
+  const { env } = await getCloudflareContext({ async: true });
+  const db = getDb(env.DB);
+  const recentOrders = await getOrdersOverview(db, 5);
+  const [orderCount, clientCount] = await Promise.all([
+    db.select({ value: count() }).from(orders),
+    db.select({ value: count() }).from(users),
+  ]);
 
-const badgeMap: Record<string, "green" | "blue" | "yellow" | "purple" | "gray"> = {
-  confirmed: "yellow",
-  pickup_scheduled: "purple",
-  picked_up: "blue",
-  washing: "blue",
-  ready: "green",
-  delivered: "green",
-};
+  const activeOrders = recentOrders.filter((order) => !["delivered", "cancelled"].includes(order.status));
+  const monthlyRevenue = recentOrders.reduce((acc, order) => acc + order.total, 0);
+  const pickupOrders = recentOrders.filter((order) => ["pending", "confirmed"].includes(order.status));
 
-const statusLabel: Record<string, string> = {
-  confirmed: "Confirmado",
-  pickup_scheduled: "Recolha Agendada",
-  washing: "Em Lavagem",
-  ready: "Pronto",
-};
+  const stats = [
+    { label: "Pedidos", value: String(orderCount[0]?.value ?? 0), delta: "Total registado", color: "text-[#2D6A2D]" },
+    { label: "Em andamento", value: String(activeOrders.length), delta: "Pedidos activos", color: "text-blue-600" },
+    { label: "Receita visível", value: formatCurrency(monthlyRevenue), delta: "Últimos pedidos", color: "text-[#2D6A2D]" },
+    { label: "Clientes", value: String(clientCount[0]?.value ?? 0), delta: "Contas criadas", color: "text-purple-600" },
+  ];
 
-const pendingPickups = [
-  { client: "Maria Santos", address: "Rue de la Gare 42", slot: "10:00-12:00", driver: "—" },
-  { client: "Pedro Nunes", address: "Av. de la Liberté 18", slot: "14:00-16:00", driver: "—" },
-];
-
-export default function AdminDashboard() {
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="max-w-6xl space-y-6">
       <div>
         <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-500">Segunda-feira, 2 de Junho de 2025</p>
+        <p className="text-sm text-gray-500">Pedidos e clientes reais da base Easy Clean.</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <Card key={s.label}>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {stats.map((stat) => (
+          <Card key={stat.label}>
             <CardContent className="pt-5">
-              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-              <p className={`text-2xl font-bold mt-1 ${s.color}`}>{s.value}</p>
-              <p className="text-xs text-gray-400 mt-1">{s.delta}</p>
+              <p className="text-xs font-medium text-gray-500">{stat.label}</p>
+              <p className={`mt-1 text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+              <p className="mt-1 text-xs text-gray-400">{stat.delta}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Recent orders */}
+      <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Pedidos de Hoje</CardTitle>
-              <Link href="/admin/orders" className="text-xs text-[#2D6A2D] font-medium">Ver todos →</Link>
+              <CardTitle>Pedidos recentes</CardTitle>
+              <Link href="/admin/orders" className="text-xs font-medium text-[#2D6A2D]">Ver todos →</Link>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-[#e2e8df]">
-              {recentOrders.map((order) => (
-                <Link key={order.id} href={`/admin/orders/${order.id}`}>
-                  <div className="flex items-center gap-3 px-5 py-3.5 hover:bg-[#f8faf7] transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-gray-900 truncate">{order.client}</p>
-                        <Badge variant={badgeMap[order.status] ?? "gray"}>
-                          {statusLabel[order.status] ?? order.status}
-                        </Badge>
+            {recentOrders.length === 0 ? (
+              <div className="px-5 py-6 text-sm text-gray-500">Nenhum pedido registado.</div>
+            ) : (
+              <div className="divide-y divide-[#e2e8df]">
+                {recentOrders.map((order) => (
+                  <Link key={order.id} href={`/admin/orders/${order.id}`}>
+                    <div className="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-[#f8faf7]">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="truncate text-sm font-medium text-gray-900">{order.clientName}</p>
+                          <Badge variant={order.badge}>{order.statusText}</Badge>
+                        </div>
+                        <p className="text-xs text-gray-400">{order.itemsText}</p>
                       </div>
-                      <p className="text-xs text-gray-400">{order.items}</p>
+                      <div className="shrink-0 text-right">
+                        <p className="text-sm font-bold text-gray-900">{order.totalText}</p>
+                        <p className="text-xs text-gray-400">{order.createdText}</p>
+                      </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-sm font-bold text-gray-900">€{order.total}</p>
-                      <p className="text-xs text-gray-400">{order.time}</p>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        {/* Pending pickups */}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Recolhas Pendentes</CardTitle>
-              <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">
-                {pendingPickups.length} hoje
+              <CardTitle>Recolhas pendentes</CardTitle>
+              <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                {pickupOrders.length}
               </span>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-[#e2e8df]">
-              {pendingPickups.map((p, i) => (
-                <div key={i} className="px-5 py-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{p.client}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">📍 {p.address}</p>
-                      <p className="text-xs text-gray-500">🕐 {p.slot}</p>
-                    </div>
-                    <button className="text-xs bg-[#e8f5e0] text-[#2D6A2D] px-3 py-1.5 rounded-lg font-medium hover:bg-[#d0ebc5] transition-colors cursor-pointer">
-                      Atribuir
-                    </button>
+            {pickupOrders.length === 0 ? (
+              <div className="px-5 py-6 text-sm text-gray-500">Sem recolhas pendentes.</div>
+            ) : (
+              <div className="divide-y divide-[#e2e8df]">
+                {pickupOrders.map((order) => (
+                  <div key={order.id} className="px-5 py-4">
+                    <p className="text-sm font-semibold text-gray-900">{order.clientName}</p>
+                    <p className="mt-0.5 text-xs text-gray-500">📍 {order.addressText}</p>
+                    <p className="text-xs text-gray-500">Pedido #{order.id.slice(0, 8).toUpperCase()}</p>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
-      </div>
-
-      {/* Quick links */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { href: "/admin/orders", icon: "📦", label: "Gerir Pedidos" },
-          { href: "/admin/clients", icon: "👥", label: "Ver Clientes" },
-          { href: "/admin/staff", icon: "👷", label: "Gestão de Equipa" },
-          { href: "/admin/reports", icon: "📈", label: "Relatórios" },
-        ].map((link) => (
-          <Link key={link.href} href={link.href}>
-            <div className="bg-white rounded-2xl border border-[#e2e8df] p-4 text-center hover:border-[#6ABF3C] hover:shadow-sm transition-all cursor-pointer">
-              <div className="text-2xl mb-2">{link.icon}</div>
-              <p className="text-xs font-semibold text-gray-700">{link.label}</p>
-            </div>
-          </Link>
-        ))}
       </div>
     </div>
   );

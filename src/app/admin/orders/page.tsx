@@ -1,34 +1,29 @@
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { getDb } from "@/lib/db";
+import { getOrdersOverview } from "@/lib/order-data";
 
-const orders = [
-  { id: "abc123", client: "Maria Santos", phone: "+352 621 001 001", status: "washing", items: "8 kg + ferro", total: 38, pickup: "2 Jun 10:00", delivery: "4 Jun 14:00", driver: "António M." },
-  { id: "def456", client: "João Silva", phone: "+352 621 002 002", status: "pickup_scheduled", items: "Saco completo", total: 29, pickup: "2 Jun 14:00", delivery: "4 Jun 16:00", driver: "—" },
-  { id: "ghi789", client: "Ana Costa", phone: "+352 621 003 003", status: "ready", items: "5 kg lavagem", total: 20, pickup: "1 Jun 10:00", delivery: "3 Jun 10:00", driver: "Carlos F." },
-  { id: "jkl012", client: "Pedro Nunes", phone: "+352 621 004 004", status: "delivered", items: "Limpeza a seco × 2", total: 16, pickup: "30 Mai 10:00", delivery: "2 Jun 10:00", driver: "António M." },
-];
+const filters = ["Todos", "Pendentes", "Confirmados", "Em lavagem", "Entregues"];
 
-const statusLabel: Record<string, string> = {
-  confirmed: "Confirmado", pickup_scheduled: "Recolha Agendada",
-  picked_up: "Recolhido", washing: "Em Lavagem",
-  ready: "Pronto", delivered: "Entregue",
-};
+export const dynamic = "force-dynamic";
 
-const badgeMap: Record<string, "green" | "blue" | "yellow" | "purple" | "gray"> = {
-  confirmed: "yellow", pickup_scheduled: "purple",
-  washing: "blue", ready: "green", delivered: "green",
-};
+export default async function AdminOrdersPage() {
+  const { env } = await getCloudflareContext({ async: true });
+  const orders = await getOrdersOverview(getDb(env.DB), 100);
 
-export default function AdminOrdersPage() {
   return (
-    <div className="space-y-6 max-w-6xl">
-      <div className="flex items-center justify-between">
+    <div className="max-w-6xl space-y-6">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <h1 className="text-xl font-bold text-gray-900">Pedidos</h1>
-        <div className="flex gap-2">
-          {["Todos", "Hoje", "Recolha", "Em Lavagem", "Prontos"].map((f) => (
-            <button key={f} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${f === "Todos" ? "bg-[#2D6A2D] text-white" : "bg-white border border-[#e2e8df] text-gray-600 hover:border-[#2D6A2D]"}`}>
-              {f}
+        <div className="flex flex-wrap gap-2">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${filter === "Todos" ? "bg-[#2D6A2D] text-white" : "border border-[#e2e8df] bg-white text-gray-600 hover:border-[#2D6A2D]"}`}
+            >
+              {filter}
             </button>
           ))}
         </div>
@@ -39,36 +34,41 @@ export default function AdminOrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#e2e8df]">
-                {["Pedido", "Cliente", "Estado", "Serviços", "Total", "Recolha", "Entrega", "Motorista", ""].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                {["Pedido", "Cliente", "Estado", "Serviços", "Total", "Criado", "Morada", ""].map((header) => (
+                  <th key={header} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{header}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e2e8df]">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-[#f8faf7] transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-gray-500">#{order.id.toUpperCase()}</td>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-gray-900">{order.client}</p>
-                    <p className="text-xs text-gray-400">{order.phone}</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge variant={badgeMap[order.status] ?? "gray"}>
-                      {statusLabel[order.status] ?? order.status}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{order.items}</td>
-                  <td className="px-4 py-3 font-bold text-gray-900">€{order.total}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.pickup}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.delivery}</td>
-                  <td className="px-4 py-3 text-gray-500">{order.driver}</td>
-                  <td className="px-4 py-3">
-                    <Link href={`/admin/orders/${order.id}`} className="text-xs text-[#2D6A2D] font-medium hover:underline">
-                      Ver →
-                    </Link>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-4 py-8 text-center text-sm text-gray-500">
+                    Nenhum pedido registado.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.id} className="transition-colors hover:bg-[#f8faf7]">
+                    <td className="px-4 py-3 font-mono text-xs text-gray-500">#{order.id.slice(0, 8).toUpperCase()}</td>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-gray-900">{order.clientName}</p>
+                      <p className="text-xs text-gray-400">{order.clientEmail || order.clientPhone || "Sem contacto"}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge variant={order.badge}>{order.statusText}</Badge>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-gray-600">{order.itemsText}</td>
+                    <td className="px-4 py-3 font-bold text-gray-900">{order.totalText}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-gray-500">{order.createdText}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-gray-500">{order.addressText}</td>
+                    <td className="px-4 py-3">
+                      <Link href={`/admin/orders/${order.id}`} className="text-xs font-medium text-[#2D6A2D] hover:underline">
+                        Ver →
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

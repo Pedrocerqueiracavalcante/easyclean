@@ -251,6 +251,25 @@ export default function OrderPage() {
             </div>
           </div>
 
+          <div className="rounded-2xl border-2 border-[#2D6A2D] bg-white p-4 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f5e0] text-xl">
+                💳
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-gray-900">Pagamento com cartão</p>
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  Vais ser enviado para o Stripe para pagar com cartão de crédito ou débito em segurança.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold text-gray-500">
+                  <span className="rounded-full bg-[#f8faf7] px-2.5 py-1">Visa</span>
+                  <span className="rounded-full bg-[#f8faf7] px-2.5 py-1">Mastercard</span>
+                  <span className="rounded-full bg-[#f8faf7] px-2.5 py-1">3D Secure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <Button className="w-full" size="lg" onClick={handleConfirm} loading={loading}>
             💳 Confirmar e Pagar
           </Button>

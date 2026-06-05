@@ -24,15 +24,15 @@ const steps = [
   { n: "04", title: "Entregamos", desc: "Tudo pronto em casa.", icon: PackageCheck },
 ];
 
-const contactInfo = {
-  location: "Luxembourg",
-  email: "Adicionar email",
-  phone: "Adicionar telefone",
-  hours: "Segunda a sábado · 08h às 19h",
-  whatsappNumber: "",
-};
-
 export default function LandingPage() {
+  const contactInfo = {
+    location: "Luxembourg",
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Adicionar email",
+    phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "Adicionar telefone",
+    hours: "Segunda a sábado · 08h às 19h",
+    whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#102316]">
       <nav className="sticky top-0 z-50 border-b border-[#e2e8df] bg-white/95 shadow-sm backdrop-blur">

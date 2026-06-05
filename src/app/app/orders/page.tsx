@@ -1,54 +1,53 @@
 import Link from "next/link";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ORDER_STATUS_LABELS } from "@/lib/utils";
+import { getDb } from "@/lib/db";
+import { getOrdersOverview } from "@/lib/order-data";
 
-const mockOrders = [
-  { id: "abc123", status: "washing", date: "2 Jun 2025", items: "8 kg lavagem + ferro", total: 28 },
-  { id: "def456", status: "delivered", date: "28 Mai 2025", items: "5 kg lavagem", total: 20 },
-  { id: "ghi789", status: "delivered", date: "15 Mai 2025", items: "Saco completo", total: 29 },
-  { id: "jkl012", status: "cancelled", date: "3 Mai 2025", items: "3 kg lavagem", total: 12 },
-];
+export const dynamic = "force-dynamic";
 
-const badgeVariant: Record<string, "green" | "blue" | "yellow" | "gray" | "purple" | "red"> = {
-  pending: "yellow",
-  confirmed: "blue",
-  washing: "blue",
-  ready: "green",
-  delivered: "green",
-  cancelled: "gray",
-  pickup_scheduled: "purple",
-};
+export default async function OrdersPage() {
+  const { env } = await getCloudflareContext({ async: true });
+  const orders = await getOrdersOverview(getDb(env.DB), 30);
 
-export default function OrdersPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-lg font-bold text-gray-900">Os meus Pedidos</h1>
 
-      <div className="space-y-3">
-        {mockOrders.map((order) => (
-          <Link key={order.id} href={`/app/orders/${order.id}`}>
-            <Card className="p-4 hover:border-[#6ABF3C] transition-colors active:scale-[0.99]">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-xs font-mono text-gray-400">#{order.id.toUpperCase()}</span>
-                    <Badge variant={badgeVariant[order.status] ?? "gray"}>
-                      {ORDER_STATUS_LABELS[order.status] ?? order.status}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-gray-700">{order.items}</p>
-                  <p className="text-xs text-gray-400 mt-1">{order.date}</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-gray-900">€{order.total}</p>
-                  <p className="text-xs text-gray-400 mt-1">Ver →</p>
-                </div>
-              </div>
-            </Card>
+      {orders.length === 0 ? (
+        <Card className="p-6 text-center">
+          <p className="font-semibold text-gray-900">Ainda não há pedidos.</p>
+          <p className="mt-1 text-sm text-gray-500">Cria o primeiro pedido e acompanha tudo por aqui.</p>
+          <Link href="/app/order" className="mt-4 inline-flex">
+            <Button>Fazer pedido</Button>
           </Link>
-        ))}
-      </div>
+        </Card>
+      ) : (
+        <div className="space-y-3">
+          {orders.map((order) => (
+            <Link key={order.id} href={`/app/orders/${order.id}`}>
+              <Card className="p-4 transition-colors hover:border-[#6ABF3C] active:scale-[0.99]">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1.5 flex items-center gap-2">
+                      <span className="font-mono text-xs text-gray-400">#{order.id.slice(0, 8).toUpperCase()}</span>
+                      <Badge variant={order.badge}>{order.statusText}</Badge>
+                    </div>
+                    <p className="text-sm text-gray-700">{order.itemsText}</p>
+                    <p className="mt-1 text-xs text-gray-400">{order.createdText}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="text-sm font-bold text-gray-900">{order.totalText}</p>
+                    <p className="mt-1 text-xs text-gray-400">Ver →</p>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
