@@ -80,9 +80,9 @@ export default function RegisterPage() {
 
         <p className="text-xs text-gray-400 text-center mt-6">
           Ao registares-te, aceitas os{" "}
-          <a href="#" className="text-[#2D6A2D] hover:underline">Termos de Serviço</a>{" "}
+          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Serviço</Link>{" "}
           e a{" "}
-          <a href="#" className="text-[#2D6A2D] hover:underline">Política de Privacidade</a>.
+          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Política de Privacidade</Link>.
         </p>
       </div>
       <p className="text-center text-sm text-gray-500 mt-6">

@@ -4,12 +4,20 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY ?? "re_placeholder");
 }
 
+function canSendEmail() {
+  return Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM_EMAIL);
+}
+
 export async function sendOrderConfirmation(
   email: string,
   name: string,
   orderId: string,
   total: number
 ) {
+  if (!canSendEmail()) {
+    return null;
+  }
+
   return getResend().emails.send({
     from: process.env.RESEND_FROM_EMAIL!,
     to: email,
@@ -46,6 +54,10 @@ export async function sendPickupReminder(
   name: string,
   pickupTime: string
 ) {
+  if (!canSendEmail()) {
+    return null;
+  }
+
   return getResend().emails.send({
     from: process.env.RESEND_FROM_EMAIL!,
     to: email,
@@ -59,6 +71,41 @@ export async function sendPickupReminder(
           <h2>Olá ${name}!</h2>
           <p>A tua roupa será recolhida amanhã entre as <strong>${pickupTime}</strong>.</p>
           <p>Por favor, certifica-te de que a roupa está pronta e acessível.</p>
+        </div>
+      </div>
+    `,
+  });
+}
+
+export async function sendOrderStatusUpdate(
+  email: string,
+  name: string,
+  orderId: string,
+  statusLabel: string
+) {
+  if (!canSendEmail()) {
+    return null;
+  }
+
+  return getResend().emails.send({
+    from: process.env.RESEND_FROM_EMAIL!,
+    to: email,
+    subject: `Atualização do pedido #${orderId.slice(0, 8).toUpperCase()}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+        <div style="background:#2D6A2D;padding:32px;text-align:center">
+          <h1 style="color:white;margin:0;font-size:28px">Easy Clean</h1>
+        </div>
+        <div style="padding:32px">
+          <h2>Olá ${name}!</h2>
+          <p>O estado do teu pedido foi atualizado para:</p>
+          <div style="background:#f0f7ec;border-radius:8px;padding:18px;margin:20px 0;color:#2D6A2D;font-weight:700">
+            ${statusLabel}
+          </div>
+          <a href="${process.env.NEXT_PUBLIC_APP_URL}/app/orders/${orderId}"
+            style="display:inline-block;background:#2D6A2D;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;margin-top:16px">
+            Ver Pedido
+          </a>
         </div>
       </div>
     `,

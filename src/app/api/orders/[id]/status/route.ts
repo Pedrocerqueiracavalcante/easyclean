@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getDb } from "@/lib/db";
-import { orders, orderStatusHistory, notifications } from "@/lib/db/schema";
+import { orders, orderStatusHistory, notifications, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { generateId } from "@/lib/utils";
+import { generateId, ORDER_STATUS_LABELS } from "@/lib/utils";
+import { sendOrderStatusUpdate } from "@/lib/email";
 
 const STATUS_NOTIFICATIONS: Record<string, { title: string; body: string }> = {
   picked_up: { title: "Roupa recolhida! 🚗", body: "A tua roupa foi recolhida e está a caminho da nossa base." },
@@ -44,6 +45,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         body: notifTemplate.body,
         orderId: id,
       });
+    }
+
+    const user = await db.query.users.findFirst({ where: eq(users.id, order.userId) });
+    if (user?.email) {
+      await sendOrderStatusUpdate(user.email, user.name, id, ORDER_STATUS_LABELS[status] ?? status).catch(() => {});
     }
 
     return NextResponse.json({ success: true });

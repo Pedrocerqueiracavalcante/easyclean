@@ -212,7 +212,9 @@ export default function LandingPage() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/login" className="transition-colors hover:text-white">Entrar</Link></li>
               <li><Link href="/register" className="transition-colors hover:text-white">Registar</Link></li>
-              <li><a href="#" className="transition-colors hover:text-white">Privacidade</a></li>
+              <li><Link href="/privacidade" className="transition-colors hover:text-white">Privacidade</Link></li>
+              <li><Link href="/termos" className="transition-colors hover:text-white">Termos</Link></li>
+              <li><Link href="/reembolso" className="transition-colors hover:text-white">Reembolso</Link></li>
             </ul>
           </div>
 

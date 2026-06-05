@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
+import { Analytics } from "@/components/analytics";
 import { PwaRegister } from "@/components/pwa-register";
 import "./globals.css";
 
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt" className={geist.variable}>
       <body className="min-h-screen bg-white antialiased">
+        <Analytics />
         <PwaRegister />
         {children}
       </body>
