@@ -37,13 +37,15 @@ export default function OrderPage() {
   const [pickupSlot, setPickupSlot] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
   const [coupon, setCoupon] = useState("");
 
   function change(id: string, delta: number) {
     setQuantities((q) => {
       const next = (q[id] ?? 0) + delta;
       if (next <= 0) {
-        const { [id]: _, ...rest } = q;
+        const rest = { ...q };
+        delete rest[id];
         return rest;
       }
       return { ...q, [id]: next };
@@ -56,15 +58,34 @@ export default function OrderPage() {
 
   async function handleConfirm() {
     setLoading(true);
+    setPaymentError("");
+
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items: quantities, pickupDay, pickupSlot, notes, coupon }),
       });
-      const data = await res.json() as { id: string };
-      router.push(`/app/orders/${data.id}`);
-    } catch {
+
+      const data = await res.json() as { id?: string; checkoutUrl?: string; error?: string };
+
+      if (!res.ok) {
+        throw new Error(data.error || "Não foi possível preparar o pagamento.");
+      }
+
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+        return;
+      }
+
+      if (data.id) {
+        router.push(`/app/orders/${data.id}`);
+        return;
+      }
+
+      throw new Error("Não foi possível preparar o pagamento.");
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "Não foi possível preparar o pagamento.");
       setLoading(false);
     }
   }
@@ -233,6 +254,12 @@ export default function OrderPage() {
           <Button className="w-full" size="lg" onClick={handleConfirm} loading={loading}>
             💳 Confirmar e Pagar
           </Button>
+
+          {paymentError ? (
+            <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-center text-xs font-medium text-red-600">
+              {paymentError}
+            </p>
+          ) : null}
 
           <p className="text-center text-xs text-gray-400">
             Pagamento seguro via Stripe · 🔒 SSL

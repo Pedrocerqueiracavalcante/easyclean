@@ -1,9 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getDb } from "@/lib/db";
-import { orders, orderItems } from "@/lib/db/schema";
+import { addresses, orders, orderItems, users } from "@/lib/db/schema";
 import { generateId } from "@/lib/utils";
 import { sendOrderConfirmation } from "@/lib/email";
+import { buildOrderCheckoutLineItems, calculateOrderTotal, orderServices } from "@/lib/order-pricing";
+import { stripe } from "@/lib/stripe";
+
+const demoUserId = "demo-user-easyclean";
+const demoAddressId = "demo-address-easyclean";
+
+async function ensureDemoCustomer(db: ReturnType<typeof getDb>) {
+  await db
+    .insert(users)
+    .values({
+      id: demoUserId,
+      name: "Cliente Easy Clean",
+      email: "cliente@easyclean.lu",
+      emailVerified: true,
+      role: "client",
+    })
+    .onConflictDoNothing();
+
+  await db
+    .insert(addresses)
+    .values({
+      id: demoAddressId,
+      userId: demoUserId,
+      label: "Casa",
+      street: "Rue de la Gare",
+      number: "42",
+      postalCode: "1611",
+      city: "Luxembourg",
+      country: "Luxembourg",
+      isDefault: true,
+    })
+    .onConflictDoNothing();
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,37 +55,46 @@ export async function POST(req: NextRequest) {
     };
 
     const { items, pickupDay, pickupSlot, notes, coupon, addressId, userId, userEmail, userName } = body;
+    const lineItems = buildOrderCheckoutLineItems(items);
+    const subtotal = calculateOrderTotal(items);
 
-    const services = [
-      { id: "wash", price: 4 },
-      { id: "iron", price: 2 },
-      { id: "dry", price: 8 },
-      { id: "bed", price: 6 },
-      { id: "shoes", price: 5 },
-      { id: "bag", price: 29 },
-    ];
+    if (lineItems.length === 0 || subtotal <= 0) {
+      return NextResponse.json({ error: "Seleciona pelo menos um serviço" }, { status: 400 });
+    }
 
-    const subtotal = Object.entries(items as Record<string, number>).reduce((acc, [id, qty]) => {
-      const svc = services.find((s) => s.id === id);
-      return acc + (svc ? svc.price * qty : 0);
-    }, 0);
+    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder") {
+      return NextResponse.json({ error: "Stripe ainda não está configurado" }, { status: 503 });
+    }
 
     const orderId = generateId();
+    const effectiveUserId = userId || demoUserId;
+    const effectiveAddressId = addressId || demoAddressId;
+    const orderNotes = [
+      notes,
+      pickupSlot ? `Recolha: dia ${pickupDay + 1}, ${pickupSlot}` : "",
+      coupon ? `Cupão informado: ${coupon}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    if (!userId || !addressId) {
+      await ensureDemoCustomer(db);
+    }
 
     await db.insert(orders).values({
       id: orderId,
-      userId,
-      addressId,
+      userId: effectiveUserId,
+      addressId: effectiveAddressId,
       subtotal,
       total: subtotal,
-      notes,
+      notes: orderNotes,
       status: "pending",
     });
 
     const itemRows = Object.entries(items as Record<string, number>)
-      .filter(([, qty]) => qty > 0)
+      .filter(([serviceId, qty]) => qty > 0 && orderServices.some((s) => s.id === serviceId))
       .map(([serviceId, qty]) => {
-        const svc = services.find((s) => s.id === serviceId)!;
+        const svc = orderServices.find((s) => s.id === serviceId)!;
         return {
           id: generateId(),
           orderId,
@@ -71,7 +113,26 @@ export async function POST(req: NextRequest) {
       await sendOrderConfirmation(userEmail, userName, orderId, subtotal).catch(() => {});
     }
 
-    return NextResponse.json({ id: orderId, total: subtotal });
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      success_url: `${appUrl}/app/orders/${orderId}?payment=success`,
+      cancel_url: `${appUrl}/app/order?payment=cancelled`,
+      metadata: {
+        type: "order",
+        orderId,
+      },
+      payment_intent_data: {
+        metadata: {
+          type: "order",
+          orderId,
+        },
+      },
+    });
+
+    return NextResponse.json({ id: orderId, total: subtotal, checkoutUrl: session.url });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Erro ao criar pedido" }, { status: 500 });
