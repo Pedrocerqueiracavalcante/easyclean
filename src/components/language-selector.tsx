@@ -562,7 +562,6 @@ for (const code of ["en", "fr", "de", "es"] as const) {
 }
 
 Object.assign(translations.en, {
-  "Luxembourg · recolha e entrega em casa": "Luxembourg · pickup and home delivery",
   "Cria conta": "Create account",
   "Guarda os teus dados.": "Save your details.",
   "Escolhe dia e horário.": "Choose day and time.",
@@ -574,7 +573,6 @@ Object.assign(translations.en, {
 });
 
 Object.assign(translations.fr, {
-  "Luxembourg · recolha e entrega em casa": "Luxembourg · collecte et livraison à domicile",
   "Cria conta": "Créer un compte",
   "Guarda os teus dados.": "Enregistrez vos informations.",
   "Escolhe dia e horário.": "Choisissez le jour et l'horaire.",
@@ -586,7 +584,6 @@ Object.assign(translations.fr, {
 });
 
 Object.assign(translations.de, {
-  "Luxembourg · recolha e entrega em casa": "Luxembourg · Abholung und Lieferung nach Hause",
   "Cria conta": "Konto erstellen",
   "Guarda os teus dados.": "Speichern Sie Ihre Daten.",
   "Escolhe dia e horário.": "Wählen Sie Tag und Uhrzeit.",
@@ -598,7 +595,6 @@ Object.assign(translations.de, {
 });
 
 Object.assign(translations.es, {
-  "Luxembourg · recolha e entrega em casa": "Luxembourg · recogida y entrega en casa",
   "Cria conta": "Crea una cuenta",
   "Guarda os teus dados.": "Guarda tus datos.",
   "Escolhe dia e horário.": "Elige día y horario.",

@@ -102,11 +102,6 @@ export default function LandingPage() {
 
         <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center px-4 py-16 md:grid-cols-[0.9fr_1.1fr]">
           <div className="max-w-2xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#dbe8d4] bg-white/90 px-4 py-2 text-sm font-bold text-[#245f2f] shadow-sm">
-              <MapPin className="h-4 w-4 text-[#2d6a2d]" />
-              <span>Luxembourg · recolha e entrega em casa</span>
-            </div>
-
             <h1 className="mb-6 text-5xl font-black leading-[0.95] tracking-tight text-[#102316] md:text-7xl">
               Roupa limpa,
               <span className="block text-[#2d6a2d]">sem perder tempo.</span>
