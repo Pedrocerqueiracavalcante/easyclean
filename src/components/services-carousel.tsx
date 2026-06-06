@@ -8,7 +8,7 @@ import { servicePages } from "@/lib/service-pages";
 const serviceIconBySlug = {
   lavagem: Droplets,
   "passagem-a-ferro": Shirt,
-  "limpeza-a-seco": Shirt,
+  "limpeza-a-seco": Sparkles,
   "roupas-de-cama": Sparkles,
   calcado: PackageCheck,
   "saco-completo": Leaf,
@@ -64,7 +64,7 @@ export function ServicesCarousel() {
         className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:px-12"
       >
         {servicePages.map((service) => {
-          const Icon = serviceIconBySlug[service.slug];
+          const Icon = serviceIconBySlug[service.slug] ?? Sparkles;
 
           return (
             <Link

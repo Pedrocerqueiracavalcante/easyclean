@@ -1,14 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
+  CalendarCheck,
   CalendarDays,
+  CheckCircle2,
   ChevronDown,
-  Droplets,
+  Clock3,
+  CreditCard,
   Mail,
   MapPin,
   MessageCircle,
   PackageCheck,
   Phone,
+  ShieldCheck,
+  Sparkles,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,10 +24,34 @@ import { CoverageMap } from "@/components/coverage-map";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
-  { n: "01", title: "Cria conta", desc: "Guarda os teus dados.", icon: CalendarDays },
+  { n: "01", title: "Cria conta", desc: "Guarda dados e morada.", icon: CalendarDays },
   { n: "02", title: "Agenda", desc: "Escolhe dia e horário.", icon: Truck },
-  { n: "03", title: "Lavamos", desc: "Tratamos a roupa.", icon: Droplets },
-  { n: "04", title: "Entregamos", desc: "Tudo pronto em casa.", icon: PackageCheck },
+  { n: "03", title: "Acompanha", desc: "Vê o estado do pedido.", icon: Clock3 },
+  { n: "04", title: "Recebe", desc: "Roupa pronta em casa.", icon: PackageCheck },
+];
+
+const trustItems = [
+  { value: "48h", label: "retorno médio" },
+  { value: "€0", label: "taxa de recolha" },
+  { value: "100%", label: "acompanhamento online" },
+];
+
+const benefits = [
+  {
+    icon: ShieldCheck,
+    title: "Dados protegidos",
+    desc: "Cada conta vê apenas os próprios endereços e pedidos.",
+  },
+  {
+    icon: CreditCard,
+    title: "Pagamento seguro",
+    desc: "Checkout Stripe com cartão de crédito ou débito.",
+  },
+  {
+    icon: Sparkles,
+    title: "Processo claro",
+    desc: "Serviços, preços e acompanhamento em poucos toques.",
+  },
 ];
 
 export default function LandingPage() {
@@ -95,23 +124,27 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-white">
+      <section className="relative overflow-hidden bg-white">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/easyclean-hero-bg.png')" }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/88 to-white/42" aria-hidden="true" />
-        <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.84)_43%,rgba(255,255,255,0.28)_100%)]" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.98)_0%,rgba(255,255,255,0.9)_48%,rgba(255,255,255,0.52)_100%)]" aria-hidden="true" />
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center px-4 py-16 md:grid-cols-[0.9fr_1.1fr]">
+        <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-[0.95fr_1.05fr] md:py-20">
           <div className="max-w-2xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dbe8d4] bg-white/90 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#2d6a2d] shadow-sm">
+              <CheckCircle2 className="h-4 w-4 text-[#6abf3c]" />
+              Lavandaria ao domicílio
+            </div>
+
             <h1 className="mb-6 text-5xl font-black leading-[0.95] tracking-tight text-[#102316] md:text-7xl">
               Roupa limpa,
               <span className="block text-[#2d6a2d]">sem perder tempo.</span>
             </h1>
             <p className="mb-8 max-w-xl text-lg leading-8 text-[#475569]">
-              Cria a tua conta, agenda a recolha e acompanha tudo pelo app da Easy Clean.
+              Agenda recolha, paga online e acompanha o pedido até à entrega. Tudo numa conta Easy Clean.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -127,13 +160,60 @@ export default function LandingPage() {
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold text-[#475569]">
-              <span className="rounded-full bg-white/90 px-4 py-2 shadow-sm ring-1 ring-[#dbe8d4]">Recolha em casa</span>
-              <span className="rounded-full bg-white/90 px-4 py-2 shadow-sm ring-1 ring-[#dbe8d4]">Serviços por pedido</span>
-              <span className="rounded-full bg-white/90 px-4 py-2 shadow-sm ring-1 ring-[#dbe8d4]">Acompanhamento online</span>
+            <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
+              {trustItems.map((item) => (
+                <div key={item.label} className="rounded-2xl border border-[#dbe8d4] bg-white/90 p-4 shadow-sm">
+                  <p className="text-2xl font-black text-[#2d6a2d]">{item.value}</p>
+                  <p className="mt-1 text-xs font-semibold leading-4 text-[#64748b]">{item.label}</p>
+                </div>
+              ))}
             </div>
 
             <MobileInstallPrompt />
+          </div>
+
+          <div className="hidden md:block">
+            <div className="ml-auto max-w-md rounded-[34px] border border-[#dbe8d4] bg-white/92 p-5 shadow-2xl shadow-[#2d6a2d]/14 backdrop-blur">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2d6a2d]">Pedido rápido</p>
+                  <p className="mt-1 text-xl font-black text-[#102316]">A tua recolha</p>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2d6a2d]">
+                  <CalendarCheck className="h-6 w-6" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  ["Serviço", "Lavagem + passagem"],
+                  ["Recolha", "Hoje ou amanhã"],
+                  ["Pagamento", "Cartão seguro"],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex items-center justify-between rounded-2xl bg-[#f7fbf4] px-4 py-3">
+                    <span className="text-sm font-semibold text-[#64748b]">{label}</span>
+                    <span className="text-sm font-black text-[#102316]">{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-[26px] bg-[#2d6a2d] p-4 text-white">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15">
+                    <Truck className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black">Acompanhamento online</p>
+                    <p className="text-xs text-white/70">Estado e mapa do pedido no app.</p>
+                  </div>
+                </div>
+                <Link href="/register">
+                  <Button className="w-full bg-white text-[#2d6a2d] hover:bg-[#eef8e8]">
+                    Começar
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -165,13 +245,42 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Confiança</p>
+              <h2 className="max-w-2xl text-3xl font-bold text-[#102316] md:text-4xl">Preparado para receber clientes reais</h2>
+            </div>
+            <Link href="/register">
+              <Button className="bg-[#2d6a2d] text-white hover:bg-[#245f2f]">Criar conta</Button>
+            </Link>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {benefits.map((benefit) => {
+              const Icon = benefit.icon;
+              return (
+                <div key={benefit.title} className="rounded-[24px] border border-[#dbe8d4] bg-[#fbfdf9] p-6 shadow-sm">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#2d6a2d] shadow-sm">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-black text-[#102316]">{benefit.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#64748b]">{benefit.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <section id="servicos" className="bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
             <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Serviços</p>
             <h2 className="mb-4 text-3xl font-bold text-[#102316] md:text-4xl">Serviços de lavandaria</h2>
             <p className="mx-auto max-w-xl text-[#64748b]">
-              O cliente pode conhecer os serviços aqui e depois entrar ou criar conta para fazer o pedido.
+              O cliente conhece os serviços e depois entra ou cria conta para fazer o pedido.
             </p>
           </div>
 
@@ -243,11 +352,7 @@ export default function LandingPage() {
               <li>{contactInfo.hours}</li>
             </ul>
             <a
-              href={
-                contactInfo.whatsappNumber
-                  ? `https://wa.me/${contactInfo.whatsappNumber}`
-                  : "#contacto"
-              }
+              href={contactInfo.whatsappNumber ? `https://wa.me/${contactInfo.whatsappNumber}` : "#contacto"}
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25d366] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-black/20 transition-transform hover:-translate-y-0.5"
             >
               <MessageCircle className="h-4 w-4" />
