@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
 import { Bell, CalendarPlus, Home, Package, Sparkles, Star, User } from "lucide-react";
+import { LanguageSelector } from "@/components/language-selector";
 
 const navItems = [
   { href: "/app/home", icon: Home, label: "Início" },
@@ -48,6 +49,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Sparkles className="h-3.5 w-3.5" />
               Conta Easy Clean
             </span>
+            <LanguageSelector />
             <Link
               href="/app/notifications"
               aria-label="Notificações"
