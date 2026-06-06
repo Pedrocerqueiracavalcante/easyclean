@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { MobileInstallPrompt } from "@/components/mobile-install-prompt";
 import { ServicesCarousel } from "@/components/services-carousel";
+import { CoverageMap } from "@/components/coverage-map";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
@@ -51,6 +52,9 @@ export default function LandingPage() {
           <div className="hidden items-center gap-8 text-sm font-semibold md:flex">
             <a href="#como-funciona" className="inline-flex items-center gap-1 text-[#245f2f] transition-colors hover:text-[#6abf3c]">
               Como funciona <ChevronDown className="h-3.5 w-3.5" />
+            </a>
+            <a href="#areas" className="text-[#245f2f] transition-colors hover:text-[#6abf3c]">
+              Áreas
             </a>
             <details className="group relative">
               <summary className="flex cursor-pointer list-none items-center gap-1 text-[#245f2f] transition-colors marker:hidden hover:text-[#6abf3c] [&::-webkit-details-marker]:hidden">
@@ -183,6 +187,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <CoverageMap />
+
       <footer id="contacto" className="bg-[#071108] py-12 text-white/56">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-4">
           <div>
@@ -203,6 +209,7 @@ export default function LandingPage() {
             <ul className="space-y-2 text-sm">
               <li><a href="#como-funciona" className="transition-colors hover:text-white">Como funciona</a></li>
               <li><a href="#servicos" className="transition-colors hover:text-white">Serviços</a></li>
+              <li><a href="#areas" className="transition-colors hover:text-white">Áreas atendidas</a></li>
               <li><Link href="/register" className="transition-colors hover:text-white">Criar conta</Link></li>
             </ul>
           </div>
