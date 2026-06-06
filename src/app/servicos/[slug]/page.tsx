@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Check, Droplets, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Droplets, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { getServiceBySlug, servicePages } from "@/lib/service-pages";
@@ -25,6 +25,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (!service) {
     notFound();
   }
+
+  const relatedServices = servicePages.filter((item) => item.slug !== service.slug).slice(0, 3);
 
   return (
     <main className="min-h-screen bg-white text-[#102316]">
@@ -184,6 +186,44 @@ export default async function ServicePage({ params }: ServicePageProps) {
             <p className="text-sm leading-6 text-[#36583a]">
               Antes de tratar a peça, avaliamos tecido, cor e instruções da etiqueta para escolher o processo mais seguro.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-[#edf4ea] bg-[#fbfdf9] px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="mb-2 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Outros serviços</p>
+              <h2 className="text-3xl font-black text-[#102316]">Continua a explorar</h2>
+            </div>
+            <Link href="/#servicos" className="inline-flex items-center gap-2 text-sm font-black text-[#2D6A2D] hover:underline">
+              Ver todos
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {relatedServices.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/servicos/${item.slug}`}
+                className="group rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#1f5d28]/10"
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition group-hover:bg-[#2D6A2D] group-hover:text-white">
+                  <Sparkles className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-black text-[#102316]">{item.title}</h3>
+                <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#66736a]">{item.subtitle}</p>
+                <div className="mt-5 flex items-center justify-between border-t border-[#edf4ea] pt-4">
+                  <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-sm font-black text-[#2D6A2D]">{item.price}</span>
+                  <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-widest text-[#94a3b8] transition group-hover:text-[#2D6A2D]">
+                    Abrir
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
