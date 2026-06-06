@@ -209,7 +209,7 @@ export default function OrderPage() {
   }
 
   return (
-    <div className="space-y-6 pb-24">
+    <div className="notranslate space-y-6 pb-24">
       <div>
         <div className="mb-2 flex items-center gap-2">
           {(["services", "schedule", "confirm"] as Step[]).map((currentStep, index) => {
@@ -261,9 +261,9 @@ export default function OrderPage() {
               return (
                 <div
                   key={service.id}
-                  className={`flex items-center gap-3 rounded-[22px] border bg-white p-3.5 shadow-sm transition-all ${quantity > 0 ? "border-[#2D6A2D] bg-[#fbfff8] shadow-[#2d6a2d]/10 ring-2 ring-[#e8f5e0]" : "border-[#e2e8df] hover:border-[#b9d9ad] hover:shadow-md"}`}
+                  className={`group flex items-center gap-3 rounded-[28px] border bg-white p-4 shadow-sm transition-all ${quantity > 0 ? "border-[#2D6A2D] bg-[#fbfff8] shadow-[#2d6a2d]/12 ring-2 ring-[#e8f5e0]" : "border-[#dfeadd] hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-lg hover:shadow-[#2d6a2d]/10"}`}
                 >
-                  <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] transition-colors ${quantity > 0 ? "bg-[#2D6A2D] text-white" : "bg-[#eef8e8] text-[#2D6A2D]"}`}>
+                  <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] transition-colors ${quantity > 0 ? "bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/20" : "bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-[#e4f5dc]"}`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -275,10 +275,10 @@ export default function OrderPage() {
                         </span>
                       ) : null}
                     </div>
-                    <p className="mt-0.5 line-clamp-2 text-xs leading-5 text-gray-400">{service.description}</p>
-                    <p className="mt-1 text-sm font-black text-[#2D6A2D]">{formatEuro(service.price)}/{service.unit}</p>
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500">{service.description}</p>
+                    <p className="mt-2 inline-flex rounded-full bg-[#eef8e8] px-3 py-1 text-sm font-black text-[#2D6A2D]">{formatEuro(service.price)}/{service.unit}</p>
                   </div>
-                  <div className="flex shrink-0 items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-2 rounded-2xl bg-[#f8faf7] p-1">
                     <button
                       type="button"
                       onClick={() => change(service.id, -1)}

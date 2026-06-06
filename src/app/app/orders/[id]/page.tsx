@@ -26,6 +26,7 @@ import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { getOrderDetail, shortId, statusLabel } from "@/lib/order-data";
 import { formatCurrency } from "@/lib/utils";
+import { OrderLiveRefresh } from "./order-live-refresh";
 import { OrderRating } from "./order-rating";
 
 const statusSteps = [
@@ -91,6 +92,8 @@ export default async function OrderDetailPage({
           {paid ? "Pagamento confirmado. Pedido recebido com sucesso." : "Pagamento pendente."}
         </div>
       </div>
+
+      <OrderLiveRefresh />
 
       <Card className="overflow-hidden">
         <CardContent className="pt-5">
