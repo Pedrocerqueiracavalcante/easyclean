@@ -22,10 +22,10 @@ import { getDb } from "@/lib/db";
 import { getOrdersOverview } from "@/lib/order-data";
 
 const quickServices = [
-  { icon: Droplets, name: "Lavagem", desc: "Roupa do dia a dia por kg.", detail: "Lavagem, secagem e dobra.", href: "/app/order?service=wash" },
-  { icon: Shirt, name: "Passagem a ferro", desc: "Camisas, calças e fardas.", detail: "Acabamento com vapor.", href: "/app/order?service=iron" },
-  { icon: Sparkles, name: "Limpeza a seco", desc: "Peças sensíveis e fatos.", detail: "Cuidado para tecido delicado.", href: "/app/order?service=dry" },
-  { icon: PackageCheck, name: "Saco completo", desc: "Preço fixo por saco.", detail: "Ideal para rotina semanal.", href: "/app/order?service=bag" },
+  { icon: Droplets, name: "Lavagem", desc: "Roupa do dia a dia por kg.", detail: "Lavagem, secagem e dobra.", href: "/servicos/lavagem" },
+  { icon: Shirt, name: "Passagem a ferro", desc: "Camisas, calças e fardas.", detail: "Acabamento com vapor.", href: "/servicos/passagem-a-ferro" },
+  { icon: Sparkles, name: "Limpeza a seco", desc: "Peças sensíveis e fatos.", detail: "Cuidado para tecido delicado.", href: "/servicos/limpeza-a-seco" },
+  { icon: PackageCheck, name: "Saco completo", desc: "Preço fixo por saco.", detail: "Ideal para rotina semanal.", href: "/servicos/saco-completo" },
 ];
 
 export const dynamic = "force-dynamic";
@@ -80,14 +80,14 @@ export default async function HomePage() {
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-bold text-gray-900">Serviços rápidos</h2>
-          <Link href="/app/order" className="text-xs font-semibold text-[#2D6A2D]">Ver todos</Link>
+          <Link href="/app/order" className="text-xs font-semibold text-[#2D6A2D]">Fazer pedido</Link>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {quickServices.map((service) => {
             const Icon = service.icon;
             return (
-              <Link key={service.name} href={service.href}>
-                <div className="min-h-40 rounded-2xl border border-[#e2e8df] bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6ABF3C] hover:shadow-md active:scale-[0.98]">
+              <Link key={service.name} href={service.href} target="_blank" rel="noreferrer">
+                <div className="min-h-44 rounded-2xl border border-[#e2e8df] bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6ABF3C] hover:shadow-md active:scale-[0.98]">
                   <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
                     <Icon className="h-5 w-5" />
                   </div>
@@ -96,6 +96,7 @@ export default async function HomePage() {
                   <p className="mt-2 rounded-xl bg-[#f7fbf4] px-3 py-2 text-[11px] font-semibold leading-4 text-[#2D6A2D]">
                     {service.detail}
                   </p>
+                  <p className="mt-3 text-[11px] font-black uppercase tracking-wider text-gray-400">Abrir guia</p>
                 </div>
               </Link>
             );

@@ -30,6 +30,15 @@ const serviceIconBySlug = {
   "saco-completo": PackageCheck,
 };
 
+const orderServiceBySlug: Record<string, string> = {
+  lavagem: "wash",
+  "passagem-a-ferro": "iron",
+  "limpeza-a-seco": "dry",
+  "roupas-de-cama": "bed",
+  calcado: "shoes",
+  "saco-completo": "bag",
+};
+
 export function generateStaticParams() {
   return servicePages.map((service) => ({
     slug: service.slug,
@@ -45,6 +54,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
   }
 
   const relatedServices = servicePages.filter((item) => item.slug !== service.slug).slice(0, 3);
+  const orderHref = `/app/order?service=${orderServiceBySlug[service.slug] ?? "wash"}`;
 
   return (
     <main className="min-h-screen bg-white text-[#102316]">
@@ -141,8 +151,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/#contacto">
-              <Button className="w-full sm:w-auto">Pedir orçamento</Button>
+            <Link href={orderHref}>
+              <Button className="w-full sm:w-auto">Fazer pedido</Button>
             </Link>
             <Link href="/#servicos">
               <Button variant="outline" className="w-full bg-white sm:w-auto">
