@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db";
 import { addresses, orders, orderItems, users } from "@/lib/db/schema";
 import { generateId } from "@/lib/utils";
 import { sendOrderConfirmation } from "@/lib/email";
+import { validatePickupSchedule } from "@/lib/order-schedule";
 import { buildOrderCheckoutLineItems, calculateOrderTotal, orderServices } from "@/lib/order-pricing";
 import { stripe } from "@/lib/stripe";
 
@@ -60,6 +61,11 @@ export async function POST(req: NextRequest) {
 
     if (lineItems.length === 0 || subtotal <= 0) {
       return NextResponse.json({ error: "Seleciona pelo menos um serviço" }, { status: 400 });
+    }
+
+    const scheduleValidation = validatePickupSchedule(pickupDay, pickupSlot);
+    if (!scheduleValidation.valid) {
+      return NextResponse.json({ error: scheduleValidation.message }, { status: 400 });
     }
 
     if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder") {

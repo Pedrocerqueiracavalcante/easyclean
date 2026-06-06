@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { isPickupSlotAvailable, orderTimeSlots } from "@/lib/order-schedule";
 
 const services = [
   { id: "wash", icon: Droplets, name: "Lavagem", unit: "kg", price: 4, description: "Lavagem e secagem completa" },
@@ -32,17 +33,6 @@ const services = [
   { id: "shoes", icon: ShieldCheck, name: "Calcado", unit: "par", price: 5, description: "Limpeza cuidada de sapatos" },
   { id: "bag", icon: PackageCheck, name: "Saco completo", unit: "saco", price: 29, description: "Saco cheio com preco fixo" },
 ];
-
-const timeSlots = [
-  "08:00 - 10:00",
-  "10:00 - 12:00",
-  "12:00 - 14:00",
-  "14:00 - 16:00",
-  "16:00 - 18:00",
-  "18:00 - 20:00",
-];
-
-const minimumPickupLeadMinutes = 60;
 
 type Step = "services" | "schedule" | "confirm";
 
@@ -64,21 +54,6 @@ const stepLabels: Record<Step, string> = {
   schedule: "Horario",
   confirm: "Confirmar",
 };
-
-function getSlotStartMinutes(slot: string) {
-  const [start] = slot.split(" - ");
-  const [hour, minute] = start.split(":").map(Number);
-  return hour * 60 + minute;
-}
-
-function getMinutesFromMidnight(date: Date) {
-  return date.getHours() * 60 + date.getMinutes();
-}
-
-function isSlotAvailable(slot: string, pickupDay: number, now: Date) {
-  if (pickupDay > 0) return true;
-  return getSlotStartMinutes(slot) >= getMinutesFromMidnight(now) + minimumPickupLeadMinutes;
-}
 
 export default function OrderPage() {
   const router = useRouter();
@@ -116,10 +91,10 @@ export default function OrderPage() {
   const subtotal = items.reduce((acc, service) => acc + service.price * (quantities[service.id] ?? 0), 0);
   const hasItems = items.length > 0;
   const availableSlots = useMemo(
-    () => timeSlots.filter((slot) => isSlotAvailable(slot, pickupDay, now)),
+    () => orderTimeSlots.filter((slot) => isPickupSlotAvailable(slot, pickupDay, now)),
     [pickupDay, now]
   );
-  const pickupSlotIsValid = Boolean(pickupSlot && isSlotAvailable(pickupSlot, pickupDay, now));
+  const pickupSlotIsValid = Boolean(pickupSlot && isPickupSlotAvailable(pickupSlot, pickupDay, now));
 
   useEffect(() => {
     fetch("/api/addresses")
@@ -346,8 +321,8 @@ export default function OrderPage() {
               </p>
             ) : null}
             <div className="grid grid-cols-2 gap-2">
-              {timeSlots.map((slot) => {
-                const available = isSlotAvailable(slot, pickupDay, now);
+              {orderTimeSlots.map((slot) => {
+                const available = isPickupSlotAvailable(slot, pickupDay, now);
                 return (
                   <button
                     key={slot}
