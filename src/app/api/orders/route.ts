@@ -3,10 +3,10 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { eq } from "drizzle-orm";
 import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { addresses, orders, orderItems } from "@/lib/db/schema";
+import { addresses, orders, orderItems, orderStatusHistory } from "@/lib/db/schema";
 import { sendOrderConfirmation } from "@/lib/email";
 import { validatePickupSchedule } from "@/lib/order-schedule";
-import { buildOrderCheckoutLineItems, calculateOrderTotal, orderServices } from "@/lib/order-pricing";
+import { buildOrderCheckoutLineItems, calculateOrderTotalWithCoupon, orderServices } from "@/lib/order-pricing";
 import { stripe } from "@/lib/stripe";
 import { generateId } from "@/lib/utils";
 
@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
     };
 
     const { items, pickupDay, pickupSlot, notes, coupon, addressId, userEmail, userName } = body;
-    const lineItems = buildOrderCheckoutLineItems(items);
-    const subtotal = calculateOrderTotal(items);
+    const { subtotal, discount, total } = calculateOrderTotalWithCoupon(items, coupon);
+    const lineItems = buildOrderCheckoutLineItems(items, discount.percent);
 
     if (lineItems.length === 0 || subtotal <= 0) {
       return NextResponse.json({ error: "Seleciona pelo menos um serviço" }, { status: 400 });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     const orderNotes = [
       notes,
       pickupSlot ? `Recolha: dia ${pickupDay + 1}, ${pickupSlot}` : "",
-      coupon ? `Cupão informado: ${coupon}` : "",
+      discount.percent > 0 ? `Cupão aplicado: ${discount.code} (-${discount.percent}%)` : coupon ? `Cupão informado: ${coupon}` : "",
     ]
       .filter(Boolean)
       .join("\n");
@@ -67,9 +67,17 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
       addressId: address.id,
       subtotal,
-      total: subtotal,
+      discount: discount.amount,
+      total,
       notes: orderNotes,
       status: "pending",
+    });
+
+    await db.insert(orderStatusHistory).values({
+      id: generateId(),
+      orderId,
+      status: "pending",
+      note: "Pedido criado pelo cliente.",
     });
 
     const itemRows = Object.entries(items)
@@ -93,7 +101,7 @@ export async function POST(req: NextRequest) {
     const confirmationEmail = userEmail || session.user.email;
     const confirmationName = userName || session.user.name || "Cliente Easy Clean";
     if (confirmationEmail) {
-      await sendOrderConfirmation(confirmationEmail, confirmationName, orderId, subtotal).catch(() => {});
+      await sendOrderConfirmation(confirmationEmail, confirmationName, orderId, total).catch(() => {});
     }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? req.nextUrl.origin;
@@ -106,16 +114,18 @@ export async function POST(req: NextRequest) {
       metadata: {
         type: "order",
         orderId,
+        coupon: discount.code,
       },
       payment_intent_data: {
         metadata: {
           type: "order",
           orderId,
+          coupon: discount.code,
         },
       },
     });
 
-    return NextResponse.json({ id: orderId, total: subtotal, checkoutUrl: checkoutSession.url });
+    return NextResponse.json({ id: orderId, subtotal, discount: discount.amount, total, checkoutUrl: checkoutSession.url });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Erro ao criar pedido" }, { status: 500 });

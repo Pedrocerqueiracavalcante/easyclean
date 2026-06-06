@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { addresses, orderItems, orders, users } from "@/lib/db/schema";
+import { addresses, orderItems, orders, orderStatusHistory, users } from "@/lib/db/schema";
 import { ORDER_STATUS_LABELS, formatCurrency, formatDateTime } from "@/lib/utils";
 import { orderServices } from "@/lib/order-pricing";
 
@@ -74,6 +74,11 @@ export async function getOrderDetail(db: ReturnType<typeof getDb>, id: string) {
     db.query.addresses.findFirst({ where: eq(addresses.id, order.addressId) }),
     db.query.users.findFirst({ where: eq(users.id, order.userId) }),
   ]);
+  const history = await db
+    .select()
+    .from(orderStatusHistory)
+    .where(eq(orderStatusHistory.orderId, id))
+    .orderBy(desc(orderStatusHistory.createdAt));
 
   return {
     order,
@@ -89,5 +94,10 @@ export async function getOrderDetail(db: ReturnType<typeof getDb>, id: string) {
     createdText: formatDateTime(order.createdAt),
     statusText: statusLabel(order.status),
     badge: badgeVariant[order.status] ?? "gray",
+    history: history.map((entry) => ({
+      ...entry,
+      statusText: statusLabel(entry.status),
+      createdText: formatDateTime(entry.createdAt),
+    })),
   };
 }

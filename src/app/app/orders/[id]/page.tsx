@@ -26,8 +26,10 @@ import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { getOrderDetail, shortId, statusLabel } from "@/lib/order-data";
 import { formatCurrency } from "@/lib/utils";
+import { OrderRating } from "./order-rating";
 
 const statusSteps = [
+  { id: "pending", icon: Clock3 },
   { id: "confirmed", icon: Check },
   { id: "pickup_scheduled", icon: Truck },
   { id: "picked_up", icon: PackageCheck },
@@ -69,6 +71,7 @@ export default async function OrderDetailPage({
   const whatsappHref = whatsappNumber
     ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Olá, preciso de ajuda com o pedido #${shortId(id)}.`)}`
     : "mailto:suporte@easyclean.lu";
+  const historyByStatus = new Map(detail.history.map((entry) => [entry.status, entry]));
 
   return (
     <div className="space-y-6">
@@ -94,7 +97,7 @@ export default async function OrderDetailPage({
           <div className="mb-5 flex items-center justify-between">
             <div>
               <p className="text-sm font-bold text-gray-900">Estado do pedido</p>
-              <p className="mt-0.5 text-xs text-gray-400">Acompanha o progresso em tempo real.</p>
+              <p className="mt-0.5 text-xs text-gray-400">Acompanha o progresso e os horários de atualização.</p>
             </div>
             <Badge variant={detail.badge}>{detail.statusText}</Badge>
           </div>
@@ -119,6 +122,12 @@ export default async function OrderDetailPage({
                       {statusLabel(step.id)}
                     </p>
                     {active ? <p className="mt-0.5 text-xs font-semibold text-[#2D6A2D]">Etapa atual</p> : null}
+                    {historyByStatus.get(step.id)?.createdText ? (
+                      <p className="mt-0.5 text-xs text-gray-400">{historyByStatus.get(step.id)?.createdText}</p>
+                    ) : null}
+                    {historyByStatus.get(step.id)?.note ? (
+                      <p className="mt-0.5 text-xs text-gray-400">{historyByStatus.get(step.id)?.note}</p>
+                    ) : null}
                   </div>
                 </div>
               );
@@ -154,6 +163,27 @@ export default async function OrderDetailPage({
           </div>
         </CardContent>
       </Card>
+
+      {detail.history.length > 0 ? (
+        <Card>
+          <CardContent>
+            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">Atualizações do pedido</p>
+            <div className="space-y-3">
+              {detail.history.map((entry) => (
+                <div key={entry.id} className="rounded-2xl bg-[#f8faf7] p-3 text-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-bold text-gray-900">{entry.statusText}</p>
+                    <span className="text-xs text-gray-400">{entry.createdText}</span>
+                  </div>
+                  {entry.note ? <p className="mt-1 text-xs leading-5 text-gray-500">{entry.note}</p> : null}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {detail.order.status === "delivered" ? <OrderRating orderId={id} /> : null}
 
       <div className="grid grid-cols-3 gap-2">
         <Link href="/app/order">

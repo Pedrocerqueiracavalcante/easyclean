@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { signOut, useSession } from "@/lib/auth-client";
+import { ProfileDetailsForm } from "./profile-details-form";
 import { ProfilePhotoUploader } from "./profile-photo-uploader";
 
 const menuItems = [
@@ -83,7 +84,7 @@ export function ProfileDashboard() {
   useEffect(() => {
     if (!session?.user?.id) return;
 
-    fetch(`/api/orders?userId=${encodeURIComponent(session.user.id)}`)
+    fetch("/api/orders")
       .then((res) => res.json())
       .then((data: unknown) => {
         if (Array.isArray(data)) {
@@ -114,6 +115,7 @@ export function ProfileDashboard() {
 
   const displayName = session.user.name ?? "Cliente Easy Clean";
   const displayEmail = session.user.email ?? "Adiciona os teus dados no registo";
+  const displayPhone = (session.user as { phone?: string | null }).phone ?? "";
   const hasPhoto = Boolean(session.user.image);
   const completionItems = [
     { label: "Email confirmado", done: Boolean(session.user.email) },
@@ -127,6 +129,7 @@ export function ProfileDashboard() {
   return (
     <div className="space-y-5">
       <ProfilePhotoUploader name={displayName} email={displayEmail} image={session.user.image} />
+      <ProfileDetailsForm name={displayName} phone={displayPhone} />
 
       <section className="rounded-[28px] border border-[#dce9d7] bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-4">

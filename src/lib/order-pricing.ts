@@ -23,7 +23,35 @@ export function calculateOrderTotal(items: OrderQuantities) {
   }, 0);
 }
 
-export function buildOrderCheckoutLineItems(items: OrderQuantities) {
+export function getOrderDiscount(coupon?: string, subtotal = 0) {
+  const code = coupon?.trim().toUpperCase();
+
+  if (code === "PRIMEIRA10" && subtotal > 0) {
+    return {
+      code,
+      percent: 10,
+      amount: Math.round(subtotal * 0.1 * 100) / 100,
+    };
+  }
+
+  return {
+    code: code || "",
+    percent: 0,
+    amount: 0,
+  };
+}
+
+export function calculateOrderTotalWithCoupon(items: OrderQuantities, coupon?: string) {
+  const subtotal = calculateOrderTotal(items);
+  const discount = getOrderDiscount(coupon, subtotal);
+  const total = Math.max(0, Math.round((subtotal - discount.amount) * 100) / 100);
+
+  return { subtotal, discount, total };
+}
+
+export function buildOrderCheckoutLineItems(items: OrderQuantities, discountPercent = 0) {
+  const multiplier = Math.max(0, 1 - discountPercent / 100);
+
   return Object.entries(items)
     .map(([id, qty]) => {
       const service = orderServices.find((item) => item.id === id);
@@ -37,7 +65,7 @@ export function buildOrderCheckoutLineItems(items: OrderQuantities) {
         price_data: {
           currency: "eur",
           product_data: { name: service.name },
-          unit_amount: Math.round(service.price * 100),
+          unit_amount: Math.round(service.price * multiplier * 100),
         },
         quantity,
       };
