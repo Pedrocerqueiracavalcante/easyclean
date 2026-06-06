@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, Droplets, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BedDouble,
+  Check,
+  Droplets,
+  PackageCheck,
+  Shirt,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { getServiceBySlug, servicePages } from "@/lib/service-pages";
@@ -10,6 +19,15 @@ type ServicePageProps = {
   params: Promise<{
     slug: string;
   }>;
+};
+
+const serviceIconBySlug = {
+  lavagem: Droplets,
+  "passagem-a-ferro": Shirt,
+  "limpeza-a-seco": Sparkles,
+  "roupas-de-cama": BedDouble,
+  calcado: PackageCheck,
+  "saco-completo": PackageCheck,
 };
 
 export function generateStaticParams() {
@@ -204,26 +222,54 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {relatedServices.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/servicos/${item.slug}`}
-                className="group rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#1f5d28]/10"
-              >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition group-hover:bg-[#2D6A2D] group-hover:text-white">
-                  <Sparkles className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-black text-[#102316]">{item.title}</h3>
-                <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#66736a]">{item.subtitle}</p>
-                <div className="mt-5 flex items-center justify-between border-t border-[#edf4ea] pt-4">
-                  <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-sm font-black text-[#2D6A2D]">{item.price}</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-widest text-[#94a3b8] transition group-hover:text-[#2D6A2D]">
-                    Abrir
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </Link>
-            ))}
+            {relatedServices.map((item) => {
+              const RelatedIcon = serviceIconBySlug[item.slug] ?? Sparkles;
+
+              return (
+                <Link
+                  key={item.slug}
+                  href={`/servicos/${item.slug}`}
+                  className="group rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#1f5d28]/10"
+                >
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition group-hover:bg-[#2D6A2D] group-hover:text-white">
+                    <RelatedIcon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-black text-[#102316]">{item.title}</h3>
+                  <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#66736a]">{item.subtitle}</p>
+                  <div className="mt-5 flex items-center justify-between border-t border-[#edf4ea] pt-4">
+                    <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-sm font-black text-[#2D6A2D]">{item.price}</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-widest text-[#94a3b8] transition group-hover:text-[#2D6A2D]">
+                      Abrir
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-16">
+        <div className="mx-auto grid max-w-6xl gap-8 rounded-[34px] border border-[#cde5c4] bg-[#2D6A2D] p-6 text-white shadow-2xl shadow-[#1f5d28]/18 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+          <div>
+            <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-[#dff5d7]">Pedido online</p>
+            <h2 className="text-3xl font-black leading-tight md:text-4xl">Pronto para agendar a tua recolha?</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/78">
+              Cria conta, escolhe os serviços e acompanha a recolha até à entrega.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row md:justify-end">
+            <Link href="/register">
+              <Button className="w-full bg-white text-[#2D6A2D] hover:bg-[#f2faee] sm:w-auto">
+                Criar conta
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button variant="outline" className="w-full border-white/40 bg-transparent text-white hover:bg-white/10 sm:w-auto">
+                Entrar
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
