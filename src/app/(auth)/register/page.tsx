@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signUp, signIn } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import {
   getSocialAuthMessage,
   socialAuthProviders,
@@ -60,10 +60,19 @@ export default function RegisterPage() {
       setMessage("A senha deve ter pelo menos 8 caracteres.");
       return;
     }
+
     setLoading(true);
     setMessage("");
     try {
-      await signUp.email({ name: form.name.trim(), email: normalizedEmail, password: form.password });
+      const response = await signUp.email({
+        name: form.name.trim(),
+        email: normalizedEmail,
+        password: form.password,
+      });
+      if (response.error) {
+        setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
+        return;
+      }
       router.push("/onboarding");
     } catch {
       setMessage("Não foi possível criar a conta. O email já pode estar em uso.");

@@ -19,7 +19,7 @@ export function createAuth(db: D1Database) {
     }),
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
+      requireEmailVerification: false,
       sendResetPassword: async ({ user, url }) => {
         await sendPasswordResetEmail(user.email, user.name, url);
       },

@@ -69,11 +69,15 @@ export default function LoginPage() {
     setLoading(true);
     setMessage("");
     try {
-      await signIn.email({ email: normalizedEmail, password });
+      const response = await signIn.email({ email: normalizedEmail, password });
+      if (response.error) {
+        setMessage("Email ou senha inválidos. Tenta novamente.");
+        return;
+      }
       window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
       router.push("/app/home");
     } catch {
-      setMessage("Email ou senha invalidos. Tenta novamente.");
+      setMessage("Email ou senha inválidos. Tenta novamente.");
     } finally {
       setLoading(false);
     }
