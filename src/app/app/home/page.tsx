@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import {
   CalendarCheck,
   ChevronRight,
@@ -15,15 +16,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { createAuth } from "@/lib/auth";
 import { addresses } from "@/lib/db/schema";
 import { getDb } from "@/lib/db";
 import { getOrdersOverview } from "@/lib/order-data";
 
 const quickServices = [
-  { icon: Droplets, name: "Lavagem", desc: "Por kg", href: "/app/order?service=wash" },
-  { icon: Shirt, name: "Passagem a ferro", desc: "Por peça", href: "/app/order?service=iron" },
-  { icon: Sparkles, name: "Limpeza a seco", desc: "Peças delicadas", href: "/app/order?service=dry" },
-  { icon: PackageCheck, name: "Saco completo", desc: "Preço fixo", href: "/app/order?service=bag" },
+  { icon: Droplets, name: "Lavagem", desc: "Roupa do dia a dia por kg.", detail: "Lavagem, secagem e dobra.", href: "/app/order?service=wash" },
+  { icon: Shirt, name: "Passagem a ferro", desc: "Camisas, calças e fardas.", detail: "Acabamento com vapor.", href: "/app/order?service=iron" },
+  { icon: Sparkles, name: "Limpeza a seco", desc: "Peças sensíveis e fatos.", detail: "Cuidado para tecido delicado.", href: "/app/order?service=dry" },
+  { icon: PackageCheck, name: "Saco completo", desc: "Preço fixo por saco.", detail: "Ideal para rotina semanal.", href: "/app/order?service=bag" },
 ];
 
 export const dynamic = "force-dynamic";
@@ -31,9 +33,14 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.DB);
+  const session = await createAuth(env.DB).api.getSession({ headers: await headers() });
+  const userId = session?.user?.id;
+
   const [recentOrders, defaultAddress] = await Promise.all([
-    getOrdersOverview(db, 2),
-    db.query.addresses.findFirst({ orderBy: desc(addresses.createdAt) }),
+    userId ? getOrdersOverview(db, 2, userId) : Promise.resolve([]),
+    userId
+      ? db.query.addresses.findFirst({ where: eq(addresses.userId, userId), orderBy: desc(addresses.createdAt) })
+      : Promise.resolve(null),
   ]);
 
   const addressText = defaultAddress
@@ -80,12 +87,15 @@ export default async function HomePage() {
             const Icon = service.icon;
             return (
               <Link key={service.name} href={service.href}>
-                <div className="min-h-32 rounded-2xl border border-[#e2e8df] bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6ABF3C] hover:shadow-md active:scale-[0.98]">
+                <div className="min-h-40 rounded-2xl border border-[#e2e8df] bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6ABF3C] hover:shadow-md active:scale-[0.98]">
                   <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
                     <Icon className="h-5 w-5" />
                   </div>
                   <p className="text-sm font-bold text-gray-900">{service.name}</p>
-                  <p className="mt-1 text-xs text-gray-400">{service.desc}</p>
+                  <p className="mt-1 text-xs leading-5 text-gray-500">{service.desc}</p>
+                  <p className="mt-2 rounded-xl bg-[#f7fbf4] px-3 py-2 text-[11px] font-semibold leading-4 text-[#2D6A2D]">
+                    {service.detail}
+                  </p>
                 </div>
               </Link>
             );

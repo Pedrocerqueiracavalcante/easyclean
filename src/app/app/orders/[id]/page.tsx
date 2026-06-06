@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
@@ -21,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { getOrderDetail, shortId, statusLabel } from "@/lib/order-data";
 import { formatCurrency } from "@/lib/utils";
@@ -54,9 +56,10 @@ export default async function OrderDetailPage({
   const { id } = await params;
   const query = searchParams ? await searchParams : {};
   const { env } = await getCloudflareContext({ async: true });
+  const session = await createAuth(env.DB).api.getSession({ headers: await headers() });
   const detail = await getOrderDetail(getDb(env.DB), id);
 
-  if (!detail) {
+  if (!detail || !session?.user?.id || detail.order.userId !== session.user.id) {
     notFound();
   }
 
@@ -120,6 +123,34 @@ export default async function OrderDetailPage({
                 </div>
               );
             })}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <div className="flex items-start justify-between gap-4 p-4">
+            <div>
+              <p className="text-sm font-bold text-gray-900">Mapa de acompanhamento</p>
+              <p className="mt-1 text-xs leading-5 text-gray-500">
+                A localização é atualizada conforme a equipa muda o estado do pedido.
+              </p>
+            </div>
+            <span className="rounded-full bg-[#eef8e8] px-3 py-1 text-xs font-bold text-[#2D6A2D]">
+              {detail.statusText}
+            </span>
+          </div>
+          <div className="relative h-64 bg-[#eef8e8]">
+            <iframe
+              title="Mapa de acompanhamento do pedido Easy Clean"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=6.080%2C49.575%2C6.180%2C49.645&layer=mapnik&marker=49.6116%2C6.1319"
+              className="h-full w-full border-0"
+              loading="lazy"
+            />
+            <div className="absolute bottom-3 left-3 right-3 rounded-2xl bg-white/95 p-3 text-xs text-gray-600 shadow-lg shadow-black/10 backdrop-blur">
+              <p className="font-bold text-gray-900">Zona operacional Easy Clean</p>
+              <p className="mt-0.5">Pedido #{shortId(id)} acompanhado por estado, recolha e entrega.</p>
+            </div>
           </div>
         </CardContent>
       </Card>

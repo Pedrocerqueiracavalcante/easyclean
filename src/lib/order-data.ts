@@ -28,8 +28,10 @@ export function statusLabel(status: string) {
   return ORDER_STATUS_LABELS[status] ?? status;
 }
 
-export async function getOrdersOverview(db: ReturnType<typeof getDb>, limit = 50) {
-  const rows = await db.select().from(orders).orderBy(desc(orders.createdAt)).limit(limit);
+export async function getOrdersOverview(db: ReturnType<typeof getDb>, limit = 50, userId?: string) {
+  const rows = userId
+    ? await db.select().from(orders).where(eq(orders.userId, userId)).orderBy(desc(orders.createdAt)).limit(limit)
+    : await db.select().from(orders).orderBy(desc(orders.createdAt)).limit(limit);
 
   return Promise.all(
     rows.map(async (order) => {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   ArrowRight,
@@ -15,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { getOrdersOverview } from "@/lib/order-data";
 
@@ -52,7 +54,8 @@ export default async function OrdersPage({
   const query = searchParams ? await searchParams : {};
   const selectedFilter = filters.some((filter) => filter.id === query.filter) ? query.filter ?? "all" : "all";
   const { env } = await getCloudflareContext({ async: true });
-  const orders = await getOrdersOverview(getDb(env.DB), 30);
+  const session = await createAuth(env.DB).api.getSession({ headers: await headers() });
+  const orders = session?.user?.id ? await getOrdersOverview(getDb(env.DB), 30, session.user.id) : [];
   const visibleOrders = filterOrders(orders, selectedFilter);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 

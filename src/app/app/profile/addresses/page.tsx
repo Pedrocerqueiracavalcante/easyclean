@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { ArrowLeft, CheckCircle2, Home, MapPin, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { createAuth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { addresses } from "@/lib/db/schema";
 
@@ -12,10 +14,15 @@ export const dynamic = "force-dynamic";
 export default async function ProfileAddressesPage() {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.DB);
-  const rows = await db.query.addresses.findMany({
-    orderBy: desc(addresses.createdAt),
-    limit: 20,
-  });
+  const session = await createAuth(env.DB).api.getSession({ headers: await headers() });
+  const userId = session?.user?.id;
+  const rows = userId
+    ? await db.query.addresses.findMany({
+        where: eq(addresses.userId, userId),
+        orderBy: desc(addresses.createdAt),
+        limit: 20,
+      })
+    : [];
 
   return (
     <div className="space-y-6">
