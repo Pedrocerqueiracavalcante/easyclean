@@ -2,21 +2,24 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle, Clock, MapPin, Navigation, Search, Truck } from "lucide-react";
+import { ArrowRight, CheckCircle, Clock, ExternalLink, MapPin, Navigation, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const areas = [
-  { name: "Luxembourg Ville", eta: "Hoje ou amanhã", x: "50%", y: "43%", status: "active" },
-  { name: "Kirchberg", eta: "Hoje ou amanhã", x: "59%", y: "34%", status: "active" },
-  { name: "Limpertsberg", eta: "Hoje ou amanhã", x: "47%", y: "32%", status: "active" },
-  { name: "Belair", eta: "Hoje ou amanhã", x: "39%", y: "45%", status: "active" },
-  { name: "Gasperich", eta: "24h a 48h", x: "53%", y: "61%", status: "active" },
-  { name: "Bonnevoie", eta: "24h a 48h", x: "60%", y: "53%", status: "active" },
-  { name: "Hollerich", eta: "24h a 48h", x: "42%", y: "56%", status: "active" },
-  { name: "Strassen", eta: "Sob confirmação", x: "30%", y: "38%", status: "confirm" },
-  { name: "Bertrange", eta: "Sob confirmação", x: "25%", y: "51%", status: "confirm" },
-  { name: "Hesperange", eta: "Sob confirmação", x: "62%", y: "70%", status: "confirm" },
+  { name: "Luxembourg Ville", eta: "Hoje ou amanhã", status: "active" },
+  { name: "Kirchberg", eta: "Hoje ou amanhã", status: "active" },
+  { name: "Limpertsberg", eta: "Hoje ou amanhã", status: "active" },
+  { name: "Belair", eta: "Hoje ou amanhã", status: "active" },
+  { name: "Gasperich", eta: "24h a 48h", status: "active" },
+  { name: "Bonnevoie", eta: "24h a 48h", status: "active" },
+  { name: "Hollerich", eta: "24h a 48h", status: "active" },
+  { name: "Strassen", eta: "Sob confirmação", status: "confirm" },
+  { name: "Bertrange", eta: "Sob confirmação", status: "confirm" },
+  { name: "Hesperange", eta: "Sob confirmação", status: "confirm" },
 ] as const;
+
+const openStreetMapUrl =
+  "https://www.openstreetmap.org/export/embed.html?bbox=6.0630%2C49.5630%2C6.2150%2C49.6600&layer=mapnik&marker=49.6116%2C6.1319";
 
 function normalize(value: string) {
   return value
@@ -42,13 +45,13 @@ export function CoverageMap() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-10 grid gap-6 md:grid-cols-[0.85fr_1.15fr] md:items-end">
           <div>
-            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Mapa inteligente</p>
+            <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Maps</p>
             <h2 className="text-3xl font-black leading-tight text-[#102316] md:text-4xl">
               Veja se recolhemos na tua zona
             </h2>
           </div>
           <p className="text-base leading-7 text-[#64748b]">
-            Um sistema simples para o cliente confirmar cobertura antes de criar conta. As zonas podem ser ajustadas conforme a operação crescer.
+            Um sistema simples para confirmar cobertura antes de criar conta. O mapa mostra a região de Luxembourg e a lista indica as zonas de recolha.
           </p>
         </div>
 
@@ -91,7 +94,7 @@ export function CoverageMap() {
                   <div>
                     <p className="font-black text-[#102316]">Confirmar disponibilidade</p>
                     <p className="mt-1 text-sm leading-6 text-[#64748b]">
-                      Ainda não temos essa zona na lista. Confirma pelo WhatsApp antes de agendar.
+                      Ainda não temos essa zona na lista. Confirma pelo contacto antes de agendar.
                     </p>
                   </div>
                 </div>
@@ -121,48 +124,64 @@ export function CoverageMap() {
                 </Button>
               </a>
             </div>
-          </div>
 
-          <div className="relative min-h-[430px] overflow-hidden rounded-[32px] border border-[#dcebd7] bg-white p-5 shadow-xl shadow-[#1f5d28]/8">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(106,191,60,0.18),transparent_18rem),linear-gradient(135deg,#ffffff_0%,#f2faee_100%)]" />
-            <div className="absolute left-8 top-8 rounded-full border border-[#dcebd7] bg-white/80 px-4 py-2 text-xs font-black uppercase tracking-widest text-[#2D6A2D] shadow-sm">
-              Luxembourg
-            </div>
-
-            <div className="relative h-full min-h-[390px] rounded-[26px] border border-[#e2ecd8] bg-white/65">
-              <div className="absolute left-[18%] top-[18%] h-[62%] w-[64%] rounded-[45%] border-2 border-dashed border-[#b9d9ad] bg-[#f7fbf4]/80" />
-              <div className="absolute left-[28%] top-[25%] h-[46%] w-[46%] rounded-[42%] border border-[#dcebd7] bg-white/60" />
-              <div className="absolute left-[39%] top-[34%] h-[28%] w-[26%] rounded-[40%] bg-[#eef8e8]" />
-
+            <div className="mt-5 grid gap-2 rounded-[24px] border border-[#dcebd7] bg-white p-3 sm:grid-cols-2">
               {areas.map((area) => (
-                <div
-                  key={area.name}
-                  className="group absolute -translate-x-1/2 -translate-y-1/2"
-                  style={{ left: area.x, top: area.y }}
-                >
-                  <div
-                    className={[
-                      "flex h-10 w-10 items-center justify-center rounded-full border-4 border-white shadow-lg transition group-hover:scale-110",
-                      area.status === "active" ? "bg-[#2D6A2D] text-white" : "bg-[#dff5d7] text-[#2D6A2D]",
-                    ].join(" ")}
-                  >
-                    {area.status === "active" ? <Truck className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
-                  </div>
-                  <div className="pointer-events-none absolute left-1/2 top-12 hidden w-40 -translate-x-1/2 rounded-2xl border border-[#dcebd7] bg-white p-3 text-center shadow-xl group-hover:block">
-                    <p className="text-xs font-black text-[#102316]">{area.name}</p>
-                    <p className="mt-1 text-[11px] text-[#64748b]">{area.eta}</p>
-                  </div>
+                <div key={area.name} className="flex items-center justify-between gap-3 rounded-2xl bg-[#fbfdf9] px-3 py-2">
+                  <span className="flex items-center gap-2 text-xs font-bold text-[#102316]">
+                    <span
+                      className={[
+                        "h-2.5 w-2.5 rounded-full",
+                        area.status === "active" ? "bg-[#2D6A2D]" : "bg-[#dff5d7] ring-1 ring-[#2D6A2D]/30",
+                      ].join(" ")}
+                    />
+                    {area.name}
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#64748b]">{area.eta}</span>
                 </div>
               ))}
+            </div>
+          </div>
 
-              <div className="absolute bottom-4 left-4 right-4 grid gap-2 rounded-[22px] border border-[#dcebd7] bg-white/90 p-3 text-xs text-[#64748b] shadow-sm sm:grid-cols-2">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-[#2D6A2D]" />
-                  Recolha ativa
+          <div className="overflow-hidden rounded-[32px] border border-[#dcebd7] bg-white shadow-xl shadow-[#1f5d28]/8">
+            <div className="flex items-center justify-between gap-3 border-b border-[#dcebd7] bg-white p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
+                  <MapPin className="h-5 w-5" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-[#dff5d7] ring-1 ring-[#2D6A2D]/30" />
-                  Sob confirmação
+                <div>
+                  <p className="font-black text-[#102316]">Mapa de Luxembourg</p>
+                  <p className="text-xs text-[#64748b]">OpenStreetMap</p>
+                </div>
+              </div>
+              <a
+                href="https://www.openstreetmap.org/#map=12/49.6116/6.1319"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#dcebd7] bg-white px-3 py-2 text-xs font-black text-[#2D6A2D] transition hover:bg-[#eef8e8]"
+              >
+                Abrir
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+            <div className="relative h-[430px] bg-[#eef8e8]">
+              <iframe
+                title="Mapa das áreas atendidas Easy Clean em Luxembourg"
+                src={openStreetMapUrl}
+                className="h-full w-full border-0"
+                loading="lazy"
+              />
+              <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-[22px] border border-[#dcebd7] bg-white/92 p-3 text-xs text-[#64748b] shadow-sm backdrop-blur">
+                <div className="flex flex-wrap gap-4">
+                  <span className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-[#2D6A2D]" />
+                    Recolha ativa
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-[#dff5d7] ring-1 ring-[#2D6A2D]/30" />
+                    Sob confirmação
+                  </span>
                 </div>
               </div>
             </div>
