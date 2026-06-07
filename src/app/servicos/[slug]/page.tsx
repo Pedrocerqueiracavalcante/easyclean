@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { getServiceBySlug, servicePages } from "@/lib/service-pages";
+import { ProductChoiceCards } from "./product-choice-cards";
 
 type ServicePageProps = {
   params: Promise<{
@@ -188,14 +189,16 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </div>
 
           <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Produtos usados</p>
-            <div className="flex flex-wrap gap-2">
-              {service.products.map((product) => (
-                <span key={product} className="rounded-full border border-[#dcebd7] bg-[#fbfdf9] px-3 py-1.5 text-xs font-bold text-[#36583a]">
-                  {product}
-                </span>
-              ))}
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Produtos recomendados</p>
+                <h3 className="mt-2 font-black text-[#102316]">Escolhe pelo tipo de tecido</h3>
+              </div>
+              <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black text-[#2D6A2D]">
+                Valores estimados
+              </span>
             </div>
+            <ProductChoiceCards products={service.products} />
           </div>
 
           <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
