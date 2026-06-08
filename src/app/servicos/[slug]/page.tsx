@@ -198,7 +198,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 Valores estimados
               </span>
             </div>
-            <ProductChoiceCards products={service.products} />
+            <ProductChoiceCards products={service.products} orderHref={orderHref} />
           </div>
 
           <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">

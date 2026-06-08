@@ -74,10 +74,19 @@ export default function OrderPage() {
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
-    const serviceId = new URLSearchParams(window.location.search).get("service");
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = params.get("service");
+    const product = params.get("produto");
+
     if (serviceId && services.some((service) => service.id === serviceId)) {
       window.setTimeout(() => {
         setQuantities((current) => (current[serviceId] ? current : { ...current, [serviceId]: 1 }));
+      }, 0);
+    }
+
+    if (product) {
+      window.setTimeout(() => {
+        setNotes((current) => current || `Produto recomendado escolhido: ${product}`);
       }, 0);
     }
   }, []);
