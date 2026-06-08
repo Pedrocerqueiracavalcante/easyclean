@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import {
   Check,
   Clock,
   CreditCard,
-  Droplets,
+  Footprints,
   MapPin,
   Minus,
   PackageCheck,
@@ -20,18 +20,19 @@ import {
   Sparkles,
   TicketPercent,
   WalletCards,
+  WashingMachine,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { isPickupSlotAvailable, orderTimeSlots } from "@/lib/order-schedule";
 
 const services = [
-  { id: "wash", icon: Droplets, name: "Lavagem", unit: "kg", price: 4, description: "Lavagem, secagem e dobra completa." },
-  { id: "iron", icon: Shirt, name: "Passagem a ferro", unit: "peça", price: 2, description: "Roupa sem vincos, pronta a usar." },
-  { id: "dry", icon: Sparkles, name: "Limpeza a seco", unit: "peça", price: 8, description: "Cuidado para peças delicadas." },
-  { id: "bed", icon: BedDouble, name: "Roupas de cama", unit: "peça", price: 6, description: "Lençóis, capas e edredons." },
-  { id: "shoes", icon: ShieldCheck, name: "Calçado", unit: "par", price: 5, description: "Limpeza cuidada de sapatos." },
-  { id: "bag", icon: PackageCheck, name: "Saco completo", unit: "saco", price: 29, description: "Saco cheio com preço fixo." },
+  { id: "wash", icon: WashingMachine, name: "Lavagem", unit: "kg", price: 4, badge: "Mais pedido", description: "Lavagem, secagem e dobra completa." },
+  { id: "iron", icon: Shirt, name: "Passagem a ferro", unit: "peça", price: 2, badge: "Acabamento", description: "Roupa sem vincos, pronta a usar." },
+  { id: "dry", icon: Sparkles, name: "Limpeza a seco", unit: "peça", price: 8, badge: "Delicados", description: "Cuidado para peças delicadas." },
+  { id: "bed", icon: BedDouble, name: "Roupas de cama", unit: "peça", price: 6, badge: "Volume", description: "Lençóis, capas e edredons." },
+  { id: "shoes", icon: Footprints, name: "Calçado", unit: "par", price: 5, badge: "Por par", description: "Limpeza cuidada de sapatos." },
+  { id: "bag", icon: PackageCheck, name: "Saco completo", unit: "saco", price: 29, badge: "Preço fixo", description: "Saco cheio com preço fixo." },
 ];
 
 type Step = "services" | "schedule" | "confirm";
@@ -257,10 +258,30 @@ export default function OrderPage() {
       ) : null}
 
       {step === "services" && (
-        <div className="space-y-4">
-          <div>
-            <h1 className="text-xl font-black text-gray-900">O que precisas?</h1>
-            <p className="mt-1 text-sm text-gray-500">Seleciona os serviços e a quantidade.</p>
+        <div className="space-y-5">
+          <div className="rounded-[30px] border border-[#dcebd7] bg-[linear-gradient(135deg,#ffffff_0%,#f4faef_100%)] p-5 shadow-sm shadow-[#1f5d28]/5">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#2D6A2D]">
+              <Sparkles className="h-3.5 w-3.5" />
+              Pedido personalizado
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-gray-950">O que precisas?</h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500">
+              Escolhe os serviços, ajusta a quantidade e vê o preço antes de continuar.
+            </p>
+            <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
+                <p className="text-xs font-black text-[#2D6A2D]">6</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">serviços</p>
+              </div>
+              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
+                <p className="text-xs font-black text-[#2D6A2D]">€</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">preço claro</p>
+              </div>
+              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
+                <p className="text-xs font-black text-[#2D6A2D]">24/7</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">online</p>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -270,40 +291,63 @@ export default function OrderPage() {
               return (
                 <div
                   key={service.id}
-                  className={`group flex items-center gap-3 rounded-[28px] border bg-white p-4 shadow-sm transition-all ${quantity > 0 ? "border-[#2D6A2D] bg-[#fbfff8] shadow-[#2d6a2d]/12 ring-2 ring-[#e8f5e0]" : "border-[#dfeadd] hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-lg hover:shadow-[#2d6a2d]/10"}`}
+                  className={`group relative overflow-hidden rounded-[30px] border bg-white p-4 shadow-sm transition-all ${
+                    quantity > 0
+                      ? "border-[#2D6A2D] bg-[#fbfff8] shadow-xl shadow-[#2d6a2d]/12 ring-2 ring-[#e8f5e0]"
+                      : "border-[#dfeadd] hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#2d6a2d]/10"
+                  }`}
                 >
-                  <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] transition-colors ${quantity > 0 ? "bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/20" : "bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-[#e4f5dc]"}`}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-black text-gray-950">{service.name}</p>
-                      {quantity > 0 ? (
-                        <span className="rounded-full bg-[#e8f5e0] px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-[#2D6A2D]">
-                          selecionado
-                        </span>
-                      ) : null}
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#eef8e8] opacity-70 transition group-hover:scale-110" />
+                  <div className="relative flex items-center gap-3">
+                    <div
+                      className={`flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-[26px] border transition-all ${
+                        quantity > 0
+                          ? "border-[#2D6A2D] bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/25"
+                          : "border-[#dcebd7] bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-white"
+                      }`}
+                    >
+                      <Icon className="h-8 w-8 stroke-[2.4]" />
                     </div>
-                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500">{service.description}</p>
-                    <p className="mt-2 inline-flex rounded-full bg-[#eef8e8] px-3 py-1 text-sm font-black text-[#2D6A2D]">{formatEuro(service.price)}/{service.unit}</p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2 rounded-2xl bg-[#f8faf7] p-1">
-                    <button
-                      type="button"
-                      onClick={() => change(service.id, -1)}
-                      disabled={quantity === 0}
-                      className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[#e2e8df] bg-white text-gray-500 transition-colors hover:border-[#2D6A2D] disabled:opacity-30"
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <span className="w-7 text-center text-lg font-black text-gray-950">{quantity}</span>
-                    <button
-                      type="button"
-                      onClick={() => change(service.id, 1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/20 transition-colors hover:bg-[#1e4d1e]"
-                    >
-                      <Plus className="h-5 w-5" />
-                    </button>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="text-[15px] font-black leading-tight text-gray-950">{service.name}</p>
+                        <span className="rounded-full bg-[#f2faee] px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-[#2D6A2D] ring-1 ring-[#dcebd7]">
+                          {service.badge}
+                        </span>
+                      </div>
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500">{service.description}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <p className="inline-flex rounded-full bg-[#102316] px-3 py-1 text-sm font-black text-white">
+                          {formatEuro(service.price)}/{service.unit}
+                        </p>
+                        {quantity > 0 ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f5e0] px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-[#2D6A2D]">
+                            <Check className="h-3 w-3" />
+                            selecionado
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-center gap-2 rounded-[22px] border border-[#edf4ea] bg-white/90 p-1.5 shadow-sm">
+                      <button
+                        type="button"
+                        aria-label={`Remover ${service.name}`}
+                        onClick={() => change(service.id, -1)}
+                        disabled={quantity === 0}
+                        className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[#e2e8df] bg-white text-gray-500 transition-colors hover:border-[#2D6A2D] hover:text-[#2D6A2D] disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="min-w-8 text-center text-lg font-black leading-none text-gray-950">{quantity}</span>
+                      <button
+                        type="button"
+                        aria-label={`Adicionar ${service.name}`}
+                        onClick={() => change(service.id, 1)}
+                        className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/25 transition-colors hover:bg-[#1e4d1e]"
+                      >
+                        <Plus className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -311,7 +355,7 @@ export default function OrderPage() {
           </div>
 
           {hasItems ? (
-            <Button className="w-full" onClick={() => setStep("schedule")}>
+            <Button className="h-12 w-full rounded-2xl text-base font-black shadow-lg shadow-[#2d6a2d]/18" onClick={() => setStep("schedule")}>
               Continuar
               <ArrowRight className="h-4 w-4" />
             </Button>
