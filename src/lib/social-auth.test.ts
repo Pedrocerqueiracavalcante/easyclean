@@ -2,17 +2,18 @@ import { describe, expect, it } from "vitest";
 import { getSocialAuthMessage, socialAuthProviders } from "./social-auth";
 
 describe("social auth content", () => {
-  it("keeps Google active and marks Apple and Facebook as coming soon", () => {
+  it("keeps Google, Facebook and Apple active", () => {
     expect(socialAuthProviders).toEqual([
       { provider: "google", label: "Google", status: "active" },
-      { provider: "apple", label: "Apple", status: "soon" },
-      { provider: "facebook", label: "Facebook", status: "soon" },
+      { provider: "facebook", label: "Facebook", status: "active" },
+      { provider: "apple", label: "Apple", status: "active" },
     ]);
   });
 
-  it("explains why social providers are unavailable", () => {
-    expect(getSocialAuthMessage("google")).toContain("credenciais do Google");
-    expect(getSocialAuthMessage("apple")).toContain("Apple estará disponível em breve");
-    expect(getSocialAuthMessage("facebook")).toContain("Facebook estará disponível em breve");
+  it("explains missing OAuth credentials per provider", () => {
+    expect(getSocialAuthMessage("google")).toContain("Google");
+    expect(getSocialAuthMessage("facebook")).toContain("Facebook");
+    expect(getSocialAuthMessage("apple")).toContain("Apple");
+    expect(getSocialAuthMessage("apple")).toContain("credenciais OAuth");
   });
 });

@@ -70,12 +70,12 @@ export default function RegisterPage() {
         password: form.password,
       });
       if (response.error) {
-        setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
+        setMessage("Nao foi possivel criar a conta. O email ja pode estar em uso.");
         return;
       }
       router.push("/onboarding");
     } catch {
-      setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
+      setMessage("Nao foi possivel criar a conta. O email ja pode estar em uso.");
     } finally {
       setLoading(false);
     }
@@ -83,16 +83,11 @@ export default function RegisterPage() {
 
   async function handleSocial(provider: SocialProvider) {
     setMessage("");
-
-    if (provider !== "google") {
-      setMessage(getSocialAuthMessage(provider));
-      return;
-    }
-
     setSocialLoading(provider);
+
     try {
       const response = await signIn.social({
-        provider: "google",
+        provider,
         callbackURL: "/onboarding",
         disableRedirect: true,
       });
@@ -100,10 +95,10 @@ export default function RegisterPage() {
         window.location.assign(response.data.url);
         return;
       }
-      setMessage(getSocialAuthMessage("google"));
+      setMessage(getSocialAuthMessage(provider));
       setSocialLoading("");
     } catch {
-      setMessage(getSocialAuthMessage("google"));
+      setMessage(getSocialAuthMessage(provider));
       setSocialLoading("");
     }
   }
@@ -112,7 +107,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <div className="rounded-3xl border border-[#dbe8d4] bg-white p-8 shadow-xl shadow-[#2d6a2d]/8">
         <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
-        <p className="mt-1 text-sm text-gray-500">Agenda recolhas e acompanha os pedidos num só lugar.</p>
+        <p className="mt-1 text-sm text-gray-500">Agenda recolhas e acompanha os pedidos num so lugar.</p>
 
         <div className="mt-8 grid grid-cols-3 gap-3">
           {socialAuthProviders.map((item) => (
@@ -124,18 +119,13 @@ export default function RegisterPage() {
               disabled={socialLoading === item.provider}
               className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-white text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:shadow-md disabled:opacity-60"
             >
-              {item.status === "soon" && (
-                <span className="absolute right-1.5 top-1.5 rounded-full bg-[#eef8e8] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#2D6A2D]">
-                  Em breve
-                </span>
-              )}
               <SocialIcon provider={item.provider} />
-              {item.label}
+              {socialLoading === item.provider ? "Abrindo" : item.label}
             </button>
           ))}
         </div>
         <p className="mt-3 text-center text-xs leading-5 text-gray-400">
-          Google será ativado assim que as credenciais OAuth forem configuradas.
+          Google, Facebook e Apple exigem credenciais OAuth configuradas no Cloudflare.
         </p>
 
         <div className="my-6 flex items-center gap-3">
@@ -157,26 +147,26 @@ export default function RegisterPage() {
             required
           />
           <Input label="Telefone" type="tel" placeholder="+352 621 000 000" value={form.phone} onChange={set("phone")} />
-          <Input label="Senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={form.password} onChange={set("password")} required />
+          <Input label="Senha" type="password" autoComplete="new-password" placeholder="Minimo 8 caracteres" value={form.password} onChange={set("password")} required />
           {message && (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
             </div>
           )}
           <Button type="submit" className="w-full" loading={loading}>
-            Criar conta grátis
+            Criar conta gratis
           </Button>
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-400">
           Ao registares-te, aceitas os{" "}
-          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Serviço</Link>{" "}
+          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Servico</Link>{" "}
           e a{" "}
-          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Política de Privacidade</Link>.
+          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Politica de Privacidade</Link>.
         </p>
       </div>
       <p className="mt-6 text-center text-sm text-gray-500">
-        Já tens conta?{" "}
+        Ja tens conta?{" "}
         <Link href="/login" className="font-semibold text-[#2D6A2D] hover:underline">Entrar</Link>
       </p>
     </div>

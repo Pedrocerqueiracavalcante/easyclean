@@ -71,13 +71,13 @@ export default function LoginPage() {
     try {
       const response = await signIn.email({ email: normalizedEmail, password });
       if (response.error) {
-        setMessage("Email ou senha inválidos. Tenta novamente.");
+        setMessage("Email ou senha invalidos. Tenta novamente.");
         return;
       }
       window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
       router.push("/app/home");
     } catch {
-      setMessage("Email ou senha inválidos. Tenta novamente.");
+        setMessage("Email ou senha invalidos. Tenta novamente.");
     } finally {
       setLoading(false);
     }
@@ -86,15 +86,10 @@ export default function LoginPage() {
   async function handleSocial(provider: SocialProvider) {
     setMessage("");
 
-    if (provider !== "google") {
-      setMessage(getSocialAuthMessage(provider));
-      return;
-    }
-
     setSocialLoading(provider);
     try {
       const response = await signIn.social({
-        provider: "google",
+        provider,
         callbackURL: "/app/home",
         disableRedirect: true,
       });
@@ -102,10 +97,10 @@ export default function LoginPage() {
         window.location.assign(response.data.url);
         return;
       }
-      setMessage(getSocialAuthMessage("google"));
+      setMessage(getSocialAuthMessage(provider));
       setSocialLoading("");
     } catch {
-      setMessage(getSocialAuthMessage("google"));
+      setMessage(getSocialAuthMessage(provider));
       setSocialLoading("");
     }
   }
@@ -118,7 +113,7 @@ export default function LoginPage() {
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-black text-gray-950">Area do cliente</p>
+            <p className="text-sm font-black text-gray-950">?rea do cliente</p>
             <p className="text-xs text-gray-500">Pedidos, moradas, pagamentos e perfil num so lugar.</p>
           </div>
         </div>
@@ -148,18 +143,13 @@ export default function LoginPage() {
               disabled={socialLoading === item.provider}
               className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-[#fbfdf9] text-xs font-bold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:bg-white hover:shadow-md disabled:opacity-60"
             >
-              {item.status === "soon" && (
-                <span className="absolute right-1.5 top-1.5 rounded-full bg-[#eef8e8] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#2D6A2D]">
-                  Em breve
-                </span>
-              )}
               <SocialIcon provider={item.provider} />
               {socialLoading === item.provider ? "Abrindo" : item.label}
             </button>
           ))}
         </div>
         <p className="mt-3 text-center text-xs leading-5 text-gray-400">
-          Google sera ativado assim que as credenciais OAuth forem configuradas.
+          Google, Facebook e Apple exigem credenciais OAuth configuradas no Cloudflare.
         </p>
 
         <div className="my-6 flex items-center gap-3">
@@ -216,7 +206,7 @@ export default function LoginPage() {
         </form>
       </div>
       <p className="mt-6 text-center text-sm text-gray-500">
-        Nao tens conta?{" "}
+        Ja tens conta?{" "}
         <Link href="/register" className="font-semibold text-[#2D6A2D] hover:underline">
           Regista-te gratis
         </Link>
