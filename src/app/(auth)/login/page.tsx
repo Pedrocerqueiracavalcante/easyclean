@@ -71,13 +71,13 @@ export default function LoginPage() {
     try {
       const response = await signIn.email({ email: normalizedEmail, password });
       if (response.error) {
-        setMessage("Email ou senha invalidos. Tenta novamente.");
+        setMessage("Email ou senha inválidos. Tenta novamente.");
         return;
       }
       window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
       router.push("/app/home");
     } catch {
-        setMessage("Email ou senha invalidos. Tenta novamente.");
+        setMessage("Email ou senha inválidos. Tenta novamente.");
     } finally {
       setLoading(false);
     }
@@ -113,8 +113,8 @@ export default function LoginPage() {
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-black text-gray-950">?rea do cliente</p>
-            <p className="text-xs text-gray-500">Pedidos, moradas, pagamentos e perfil num so lugar.</p>
+            <p className="text-sm font-black text-gray-950">Área do cliente</p>
+            <p className="text-xs text-gray-500">Pedidos, moradas, pagamentos e perfil num só lugar.</p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function LoginPage() {
             label="Senha"
             type="password"
             autoComplete="current-password"
-            placeholder="Minimo 8 caracteres"
+            placeholder="Mínimo 8 caracteres"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -182,7 +182,7 @@ export default function LoginPage() {
           <div className="grid gap-2 rounded-2xl bg-[#f8faf7] p-3 text-xs text-gray-500">
             <p className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 text-[#2D6A2D]" />
-              O email valido fica salvo automaticamente neste dispositivo.
+              O email válido fica salvo automaticamente neste dispositivo.
             </p>
             <p className="flex items-center gap-2">
               <LockKeyhole className="h-3.5 w-3.5 text-[#2D6A2D]" />
@@ -206,9 +206,9 @@ export default function LoginPage() {
         </form>
       </div>
       <p className="mt-6 text-center text-sm text-gray-500">
-        Ja tens conta?{" "}
+        Não tens conta?{" "}
         <Link href="/register" className="font-semibold text-[#2D6A2D] hover:underline">
-          Regista-te gratis
+          Regista-te grátis
         </Link>
       </p>
     </div>

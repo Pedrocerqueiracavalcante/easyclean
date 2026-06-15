@@ -70,12 +70,12 @@ export default function RegisterPage() {
         password: form.password,
       });
       if (response.error) {
-        setMessage("Nao foi possivel criar a conta. O email ja pode estar em uso.");
+        setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
         return;
       }
       router.push("/onboarding");
     } catch {
-      setMessage("Nao foi possivel criar a conta. O email ja pode estar em uso.");
+      setMessage("Não foi possível criar a conta. O email já pode estar em uso.");
     } finally {
       setLoading(false);
     }
@@ -107,7 +107,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <div className="rounded-3xl border border-[#dbe8d4] bg-white p-8 shadow-xl shadow-[#2d6a2d]/8">
         <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
-        <p className="mt-1 text-sm text-gray-500">Agenda recolhas e acompanha os pedidos num so lugar.</p>
+        <p className="mt-1 text-sm text-gray-500">Agenda recolhas e acompanha os pedidos num só lugar.</p>
 
         <div className="mt-8 grid grid-cols-3 gap-3">
           {socialAuthProviders.map((item) => (
@@ -147,26 +147,26 @@ export default function RegisterPage() {
             required
           />
           <Input label="Telefone" type="tel" placeholder="+352 621 000 000" value={form.phone} onChange={set("phone")} />
-          <Input label="Senha" type="password" autoComplete="new-password" placeholder="Minimo 8 caracteres" value={form.password} onChange={set("password")} required />
+          <Input label="Senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={form.password} onChange={set("password")} required />
           {message && (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
             </div>
           )}
           <Button type="submit" className="w-full" loading={loading}>
-            Criar conta gratis
+            Criar conta grátis
           </Button>
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-400">
           Ao registares-te, aceitas os{" "}
-          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Servico</Link>{" "}
+          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Serviço</Link>{" "}
           e a{" "}
-          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Politica de Privacidade</Link>.
+          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Política de Privacidade</Link>.
         </p>
       </div>
       <p className="mt-6 text-center text-sm text-gray-500">
-        Ja tens conta?{" "}
+        Já tens conta?{" "}
         <Link href="/login" className="font-semibold text-[#2D6A2D] hover:underline">Entrar</Link>
       </p>
     </div>

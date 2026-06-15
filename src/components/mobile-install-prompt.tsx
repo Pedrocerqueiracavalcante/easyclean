@@ -70,8 +70,8 @@ export function MobileInstallPrompt() {
           <p className="font-bold text-[#102316]">Usa a Easy Clean como app</p>
           <p className="mt-1 text-sm leading-6 text-[#475569]">
             {ios
-              ? "No iPhone, toca em Partilhar e depois em Adicionar ao ecra principal."
-              : "Instala no Android para abrir rapido, direto pelo telemovel."}
+              ? "No iPhone, toca em Partilhar e depois em Adicionar ao ecrã principal."
+              : "Instala no Android para abrir rápido, direto pelo telemóvel."}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {installEvent ? (
@@ -80,7 +80,7 @@ export function MobileInstallPrompt() {
               </Button>
             ) : null}
             <Button type="button" size="sm" variant="outline" className="border-[#dbe8d4] text-[#245f2f] hover:bg-[#eef8e8]" onClick={closePrompt}>
-              Agora nao
+              Agora não
             </Button>
           </div>
         </div>
