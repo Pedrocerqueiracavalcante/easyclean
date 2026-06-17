@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   ArrowRight,
   BedDouble,
-  Check,
   Droplets,
   PackageCheck,
   Shirt,
@@ -94,64 +93,49 @@ export default async function ServicePage({ params }: ServicePageProps) {
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full border border-[#b9d9ad]" aria-hidden="true" />
         <div className="absolute right-16 top-16 h-36 w-36 rounded-full bg-[#eef8e8] blur-2xl" aria-hidden="true" />
 
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_360px] md:items-center md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-6 px-4 py-10 md:grid-cols-[1fr_320px] md:items-center md:py-14">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcebd7] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-[#2D6A2D] shadow-sm">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#dcebd7] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#2D6A2D] shadow-sm">
               <Sparkles className="h-4 w-4 text-[#6ABF3C]" />
               Guia Easy Clean
             </div>
-            <h1 className="mb-5 max-w-3xl text-5xl font-black leading-[0.95] text-[#102316] md:text-7xl">{service.title}</h1>
-            <p className="max-w-2xl text-lg leading-8 text-[#5f6f63]">{service.subtitle}</p>
+            <h1 className="mb-4 max-w-3xl text-4xl font-black leading-[0.98] text-[#102316] md:text-6xl">{service.title}</h1>
+            <p className="max-w-2xl text-base leading-7 text-[#5f6f63]">{service.subtitle}</p>
           </div>
 
-          <div className="rounded-[28px] border border-[#dcebd7] bg-white p-6 shadow-2xl shadow-[#1f5d28]/10">
+          <div className="rounded-[24px] border border-[#dcebd7] bg-white p-5 shadow-xl shadow-[#1f5d28]/8">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-[#2D6A2D]">Preço base</p>
-            <p className="mt-3 text-3xl font-black text-[#102316]">{service.price}</p>
-            <p className="mt-4 text-sm leading-6 text-[#66736a]">
+            <p className="mt-2 text-3xl font-black text-[#102316]">{service.price}</p>
+            <Link href={orderHref} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2D6A2D] px-4 py-3 text-sm font-black text-white transition hover:bg-[#245f2f]">
+              Fazer pedido
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <p className="hidden">
               O valor final pode variar conforme quantidade, urgência e tipo de peça.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:py-20">
+      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-8 md:grid-cols-[0.82fr_1.18fr] md:py-12">
         <div>
-          <p className="mb-3 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Detalhes do serviço</p>
-          <h2 className="mb-5 text-3xl font-black text-[#102316] md:text-4xl">O cuidado certo para cada tecido</h2>
-          <p className="text-base leading-8 text-[#5f6f63]">{service.description}</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#2D6A2D]">Detalhes do serviço</p>
+          <h2 className="mb-3 text-2xl font-black text-[#102316] md:text-3xl">O cuidado certo para cada tecido</h2>
+          <p className="text-sm leading-7 text-[#5f6f63]">{service.description}</p>
 
-          <div className="mt-6 rounded-[24px] border border-[#cde5c4] bg-[#f2faee] p-5">
+          <div className="mt-5 rounded-[24px] border border-[#cde5c4] bg-[#f2faee] p-4">
             <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Para que serve</p>
             <p className="text-sm leading-6 text-[#36583a]">{service.bestFor}</p>
           </div>
 
-          <div className="mt-8 rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <h3 className="mb-4 font-black text-[#102316]">Inclui</h3>
-            <ul className="space-y-3">
-              {service.highlights.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-6 text-[#5f6f63]">
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#2D6A2D]" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-4 grid gap-2">
+            {service.highlights.map((item) => (
+              <div key={item} className="rounded-2xl border border-[#dcebd7] bg-white px-4 py-3 text-sm font-black text-[#102316] shadow-sm">
+                {item}
+              </div>
+            ))}
           </div>
-
-          <div className="mt-5 rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <h3 className="mb-4 font-black text-[#102316]">Como tratamos</h3>
-            <div className="grid gap-3">
-              {service.process.map((step, index) => (
-                <div key={step} className="flex gap-3 rounded-2xl border border-[#e2ecd8] bg-[#fbfdf9] p-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2D6A2D] text-xs font-black text-white">
-                    {index + 1}
-                  </span>
-                  <p className="pt-1 text-sm leading-6 text-[#5f6f63]">{step}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <Link href={orderHref}>
               <Button className="w-full sm:w-auto">Fazer pedido</Button>
             </Link>
@@ -163,61 +147,44 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </div>
         </div>
 
-        <div className="space-y-5">
-          <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
-                <Droplets className="h-6 w-6" />
+        <div className="space-y-4">
+          <div className="rounded-[24px] border border-[#dcebd7] bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D]">
+                <Droplets className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Tecidos</p>
-                <h3 className="font-black text-[#102316]">Material, cuidado e produto indicado</h3>
+                <h3 className="font-black text-[#102316]">Cuidado indicado</h3>
               </div>
             </div>
 
-            <div className="grid gap-3">
+            <div className="grid gap-2">
               {service.fabricGuide.map((item) => (
-                <div key={item.fabric} className="rounded-2xl border border-[#e2ecd8] bg-[#fbfdf9] p-4 transition hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-md">
-                  <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div key={item.fabric} className="rounded-2xl border border-[#e2ecd8] bg-[#fbfdf9] p-3 transition hover:border-[#b9d9ad] hover:shadow-sm">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <h4 className="font-black text-[#102316]">{item.fabric}</h4>
                     <span className="text-xs font-black uppercase tracking-wider text-[#2D6A2D]">{item.product}</span>
                   </div>
-                  <p className="text-sm leading-6 text-[#66736a]">{item.care}</p>
+                  <p className="mt-1 line-clamp-2 text-sm leading-5 text-[#66736a]">{item.care}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <div className="mb-5 flex items-start justify-between gap-4">
+            <div className="mb-4 flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Produtos recomendados</p>
-                <h3 className="mt-2 font-black text-[#102316]">Escolhe pelo tipo de tecido</h3>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Produtos</p>
+                <h3 className="mt-1 font-black text-[#102316]">Escolhe e pede</h3>
               </div>
               <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black text-[#2D6A2D]">
-                Valores estimados
+                Preço claro
               </span>
             </div>
             <ProductChoiceCards products={service.products} orderHref={orderHref} />
           </div>
 
-          <div className="rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">O que evitar</p>
-            <ul className="space-y-3">
-              {service.avoid.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-6 text-[#5f6f63]">
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#2D6A2D]" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-[28px] border border-[#cde5c4] bg-[#f2faee] p-5">
-            <p className="text-sm leading-6 text-[#36583a]">
-              Antes de tratar a peça, avaliamos tecido, cor e instruções da etiqueta para escolher o processo mais seguro.
-            </p>
-          </div>
         </div>
       </section>
 
