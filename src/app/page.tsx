@@ -29,12 +29,6 @@ const steps = [
   { n: "04", title: "Recebe", desc: "Roupa pronta em casa.", icon: PackageCheck },
 ];
 
-const trustItems = [
-  { value: "48h", label: "retorno médio" },
-  { value: "€0", label: "taxa de recolha" },
-  { value: "100%", label: "acompanhamento online" },
-];
-
 const benefits = [
   {
     icon: ShieldCheck,
@@ -154,15 +148,6 @@ export default function LandingPage() {
                   Já tenho conta
                 </Button>
               </Link>
-            </div>
-
-            <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
-              {trustItems.map((item) => (
-                <div key={item.label} className="rounded-2xl border border-[#dbe8d4] bg-white/90 p-4 shadow-sm">
-                  <p className="text-2xl font-black text-[#2d6a2d]">{item.value}</p>
-                  <p className="mt-1 text-xs font-semibold leading-4 text-[#64748b]">{item.label}</p>
-                </div>
-              ))}
             </div>
 
             <MobileInstallPrompt />

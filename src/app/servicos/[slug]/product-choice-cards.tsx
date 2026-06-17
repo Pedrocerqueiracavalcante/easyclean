@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, ShoppingBag, Sparkles } from "lucide-react";
+import { ArrowRight, Check, ShoppingBag } from "lucide-react";
 
 type ProductChoice = {
   name: string;
@@ -24,8 +24,8 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
     : orderHref;
 
   return (
-    <div className="space-y-4">
-      <div className="grid gap-3">
+    <div className="space-y-3">
+      <div className="grid gap-2.5">
         {products.map((product) => {
           const isSelected = selectedProduct === product.name;
 
@@ -35,16 +35,16 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
               type="button"
               aria-pressed={isSelected}
               onClick={() => setSelectedProduct(product.name)}
-              className={`group rounded-2xl border p-4 text-left transition focus:outline-none focus:ring-2 focus:ring-[#6ABF3C] focus:ring-offset-2 ${
+              className={`group rounded-[22px] border p-3 text-left transition focus:outline-none focus:ring-2 focus:ring-[#6ABF3C] focus:ring-offset-2 ${
                 isSelected
-                  ? "border-[#2D6A2D] bg-[#f2faee] shadow-lg shadow-[#1f5d28]/10 ring-2 ring-[#dcebd7]"
+                  ? "border-[#2D6A2D] bg-[#f2faee] shadow-md shadow-[#1f5d28]/8 ring-1 ring-[#b9d9ad]"
                   : "border-[#dcebd7] bg-white hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-md"
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 gap-3">
                   <span
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl transition ${
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl transition ${
                       isSelected ? "bg-[#2D6A2D] text-white" : "bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-[#e2f4db]"
                     }`}
                   >
@@ -59,11 +59,10 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
                   {product.price}
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-[#5f6f63]">{product.note}</p>
-              <div className="mt-3 flex items-center justify-between border-t border-[#e2ecd8] pt-3">
-                <span className="text-xs font-bold text-[#66736a]">Produto recomendado</span>
-                <span className={`text-xs font-black uppercase tracking-widest ${isSelected ? "text-[#2D6A2D]" : "text-[#94a3b8]"}`}>
-                  {isSelected ? "Escolhido" : "Escolher"}
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <p className="line-clamp-2 text-sm leading-5 text-[#5f6f63]">{product.note}</p>
+                <span className={`shrink-0 text-xs font-black uppercase tracking-widest ${isSelected ? "text-[#2D6A2D]" : "text-[#94a3b8]"}`}>
+                  {isSelected ? "Selecionado" : "Escolher"}
                 </span>
               </div>
             </button>
@@ -72,22 +71,21 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
       </div>
 
       {selected ? (
-        <div className="rounded-[24px] border border-[#cde5c4] bg-[#102316] p-4 text-white shadow-xl shadow-[#102316]/10">
-          <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#6ABF3C] text-[#102316]">
-              <Sparkles className="h-5 w-5" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#baf28e]">Selecionado</p>
-              <h4 className="mt-1 font-black">{selected.name}</h4>
-              <p className="mt-1 text-sm leading-6 text-white/72">{selected.bestFor}</p>
+        <div className="rounded-[22px] border border-[#cde5c4] bg-[#f7fbf4] p-3 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2D6A2D]">Selecionado</p>
+              <h4 className="truncate font-black text-[#102316]">{selected.name}</h4>
             </div>
+            <span className="shrink-0 rounded-full bg-white px-3 py-1 text-sm font-black text-[#2D6A2D] ring-1 ring-[#dcebd7]">
+              {selected.price}
+            </span>
           </div>
           <Link
             href={selectedHref}
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-black text-[#2D6A2D] transition hover:bg-[#f2faee]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2D6A2D] px-4 py-3 text-sm font-black text-white shadow-lg shadow-[#2d6a2d]/15 transition hover:bg-[#245f2f]"
           >
-            Pedir com este produto
+            Pedir agora
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
