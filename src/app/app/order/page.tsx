@@ -258,30 +258,15 @@ export default function OrderPage() {
       ) : null}
 
       {step === "services" && (
-        <div className="space-y-5">
-          <div className="rounded-[30px] border border-[#dcebd7] bg-[linear-gradient(135deg,#ffffff_0%,#f4faef_100%)] p-5 shadow-sm shadow-[#1f5d28]/5">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#2D6A2D]">
-              <Sparkles className="h-3.5 w-3.5" />
-              Pedido personalizado
+        <div className="space-y-4">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2D6A2D]">Serviços</p>
+              <h1 className="mt-1 text-2xl font-black tracking-tight text-gray-950">O que precisas?</h1>
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-gray-950">O que precisas?</h1>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500">
-              Escolhe os serviços, ajusta a quantidade e vê o preço antes de continuar.
-            </p>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
-                <p className="text-xs font-black text-[#2D6A2D]">6</p>
-                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">serviços</p>
-              </div>
-              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
-                <p className="text-xs font-black text-[#2D6A2D]">€</p>
-                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">preço claro</p>
-              </div>
-              <div className="rounded-2xl border border-[#e2ecd8] bg-white px-2 py-3">
-                <p className="text-xs font-black text-[#2D6A2D]">24/7</p>
-                <p className="mt-0.5 text-[11px] font-semibold text-gray-500">online</p>
-              </div>
-            </div>
+            <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black text-[#2D6A2D] ring-1 ring-[#dcebd7]">
+              {formatEuro(total)}
+            </span>
           </div>
 
           <div className="space-y-3">
@@ -300,13 +285,13 @@ export default function OrderPage() {
                   <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#eef8e8] opacity-70 transition group-hover:scale-110" />
                   <div className="relative flex items-center gap-3">
                     <div
-                      className={`flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-[26px] border transition-all ${
+                      className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] border transition-all sm:h-[72px] sm:w-[72px] ${
                         quantity > 0
                           ? "border-[#2D6A2D] bg-[#2D6A2D] text-white shadow-lg shadow-[#2d6a2d]/25"
                           : "border-[#dcebd7] bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-white"
                       }`}
                     >
-                      <Icon className="h-8 w-8 stroke-[2.4]" />
+                      <Icon className="h-7 w-7 stroke-[2.4] sm:h-8 sm:w-8" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">

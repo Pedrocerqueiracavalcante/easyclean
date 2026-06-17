@@ -221,20 +221,20 @@ export default async function ServicePage({ params }: ServicePageProps) {
         </div>
       </section>
 
-      <section className="border-t border-[#edf4ea] bg-[#fbfdf9] px-4 py-16">
+      <section className="border-t border-[#edf4ea] bg-[#fbfdf9] px-4 py-10">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-5 flex items-end justify-between gap-3">
             <div>
               <p className="mb-2 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Outros serviços</p>
-              <h2 className="text-3xl font-black text-[#102316]">Continua a explorar</h2>
+              <h2 className="text-2xl font-black text-[#102316] sm:text-3xl">Continua a explorar</h2>
             </div>
-            <Link href="/#servicos" className="inline-flex items-center gap-2 text-sm font-black text-[#2D6A2D] hover:underline">
-              Ver todos
+            <Link href="/#servicos" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-[#2D6A2D] ring-1 ring-[#dcebd7] transition hover:bg-[#eef8e8]">
+              Todos
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">
             {relatedServices.map((item) => {
               const RelatedIcon = serviceIconBySlug[item.slug] ?? Sparkles;
 
@@ -242,15 +242,17 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 <Link
                   key={item.slug}
                   href={`/servicos/${item.slug}`}
-                  className="group rounded-[28px] border border-[#dcebd7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#1f5d28]/10"
+                  className="group min-w-[82%] snap-start rounded-[24px] border border-[#dcebd7] bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-[#b9d9ad] hover:shadow-xl hover:shadow-[#1f5d28]/10 sm:min-w-[44%] md:min-w-0"
                 >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition group-hover:bg-[#2D6A2D] group-hover:text-white">
-                    <RelatedIcon className="h-5 w-5" />
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2D6A2D] transition group-hover:bg-[#2D6A2D] group-hover:text-white">
+                      <RelatedIcon className="h-5 w-5" />
+                    </div>
+                    <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black text-[#2D6A2D]">{item.price}</span>
                   </div>
                   <h3 className="text-lg font-black text-[#102316]">{item.title}</h3>
-                  <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#66736a]">{item.subtitle}</p>
-                  <div className="mt-5 flex items-center justify-between border-t border-[#edf4ea] pt-4">
-                    <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-sm font-black text-[#2D6A2D]">{item.price}</span>
+                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#66736a]">{item.subtitle}</p>
+                  <div className="mt-4 flex items-center justify-end border-t border-[#edf4ea] pt-3">
                     <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-widest text-[#94a3b8] transition group-hover:text-[#2D6A2D]">
                       Abrir
                       <ArrowRight className="h-3.5 w-3.5" />
