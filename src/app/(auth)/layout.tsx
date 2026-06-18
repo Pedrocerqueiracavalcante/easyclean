@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, Clock, Home, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Clock, Home } from "lucide-react";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f7faf5]">
-      <div className="mx-auto grid min-h-screen max-w-7xl lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="mx-auto grid min-h-screen max-w-7xl lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="relative hidden overflow-hidden bg-[#173f20] p-10 text-white lg:flex lg:flex-col lg:justify-between">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(181,255,120,0.22),transparent_34%),linear-gradient(145deg,#173f20_0%,#2D6A2D_58%,#63b83b_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(181,255,120,0.2),transparent_34%),linear-gradient(145deg,#173f20_0%,#2D6A2D_60%,#63b83b_100%)]" />
           <div className="absolute -right-16 top-16 h-56 w-56 rounded-full border border-white/15" />
           <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
 
@@ -28,20 +28,19 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 Lavandaria ao domicílio
               </p>
               <h1 className="text-5xl font-black leading-[1.02] tracking-tight">
-                A tua roupa cuidada sem sair de casa.
+                Entra, agenda e acompanha.
               </h1>
-              <p className="mt-5 text-base leading-7 text-white/78">
-                Agenda recolha, acompanha o pedido e recebe tudo pronto com uma experiência simples e organizada.
+              <p className="mt-5 max-w-sm text-base leading-7 text-white/78">
+                Uma conta para pedir lavandaria, guardar morada e ver o estado da entrega.
               </p>
             </div>
           </div>
 
           <div className="relative grid gap-3">
             {[
-              { icon: Home, text: "Recolha e entrega em casa" },
-              { icon: Clock, text: "Pedidos acompanhados em tempo real" },
-              { icon: ShieldCheck, text: "Conta segura para clientes" },
-              { icon: CheckCircle2, text: "Processo claro do início ao fim" },
+              { icon: Home, text: "Morada guardada" },
+              { icon: Clock, text: "Pedido acompanhado" },
+              { icon: CheckCircle2, text: "Pagamento simples" },
             ].map((item) => {
               const Icon = item.icon;
               return (
@@ -68,7 +67,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </Link>
           </div>
 
-          <div className="flex flex-1 items-center justify-center px-4 py-8 lg:px-12">
+          <div className="flex flex-1 items-center justify-center px-4 py-6 lg:px-12">
             {children}
           </div>
         </main>
