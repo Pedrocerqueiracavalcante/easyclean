@@ -8,7 +8,7 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
-  title: { default: "Easy Clean | Lavandaria ao Domicilio Luxembourg", template: "%s | Easy Clean" },
+  title: { default: "Easy Clean | Lavandaria ao Domicílio Luxembourg", template: "%s | Easy Clean" },
   description:
     "Recolhemos, lavamos e entregamos a tua roupa em Luxembourg. Rapido, facil e sustentavel.",
   keywords: ["lavandaria", "luxembourg", "lavagem roupa", "entrega casa", "easy clean"],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Easy Clean Luxembourg",
-    description: "Lavandaria ao domicilio em Luxembourg",
+    description: "Lavandaria ao domicílio em Luxembourg",
     type: "website",
     locale: "pt_PT",
   },

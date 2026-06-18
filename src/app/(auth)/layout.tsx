@@ -25,13 +25,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
             <div className="mt-20 max-w-md">
               <p className="mb-4 inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#dff5d7]">
-                Lavandaria ao domicilio
+                Lavandaria ao domicílio
               </p>
               <h1 className="text-5xl font-black leading-[1.02] tracking-tight">
                 A tua roupa cuidada sem sair de casa.
               </h1>
               <p className="mt-5 text-base leading-7 text-white/78">
-                Agenda recolha, acompanha o pedido e recebe tudo pronto com uma experiencia simples e organizada.
+                Agenda recolha, acompanha o pedido e recebe tudo pronto com uma experiência simples e organizada.
               </p>
             </div>
           </div>
@@ -41,7 +41,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               { icon: Home, text: "Recolha e entrega em casa" },
               { icon: Clock, text: "Pedidos acompanhados em tempo real" },
               { icon: ShieldCheck, text: "Conta segura para clientes" },
-              { icon: CheckCircle2, text: "Processo claro do inicio ao fim" },
+              { icon: CheckCircle2, text: "Processo claro do início ao fim" },
             ].map((item) => {
               const Icon = item.icon;
               return (
