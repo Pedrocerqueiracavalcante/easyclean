@@ -261,8 +261,8 @@ export default function OrderPage() {
         <div className="space-y-4">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2D6A2D]">Serviços</p>
               <h1 className="mt-1 text-2xl font-black tracking-tight text-gray-950">O que precisas?</h1>
+              <p className="mt-1 text-sm text-gray-500">Escolhe e continua.</p>
             </div>
             <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black text-[#2D6A2D] ring-1 ring-[#dcebd7]">
               {formatEuro(total)}
@@ -300,7 +300,7 @@ export default function OrderPage() {
                           {service.badge}
                         </span>
                       </div>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500">{service.description}</p>
+                      <p className="mt-1 line-clamp-1 text-xs leading-5 text-gray-500">{service.description}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <p className="inline-flex rounded-full bg-[#102316] px-3 py-1 text-sm font-black text-white">
                           {formatEuro(service.price)}/{service.unit}
@@ -388,7 +388,7 @@ export default function OrderPage() {
             </p>
             {pickupDay === 0 ? (
               <p className="mb-3 rounded-2xl bg-[#f8faf7] px-4 py-3 text-xs leading-5 text-gray-500">
-                Para hoje, só mostramos horários com pelo menos 1 hora de antecedência.
+                Hoje só aparecem horários com 1 hora de antecedência.
               </p>
             ) : null}
             <div className="grid grid-cols-2 gap-2">

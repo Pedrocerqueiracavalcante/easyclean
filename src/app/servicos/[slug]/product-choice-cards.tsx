@@ -41,8 +41,8 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
                   : "border-[#dcebd7] bg-white hover:-translate-y-0.5 hover:border-[#b9d9ad] hover:shadow-md"
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 gap-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <span
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl transition ${
                       isSelected ? "bg-[#2D6A2D] text-white" : "bg-[#eef8e8] text-[#2D6A2D] group-hover:bg-[#e2f4db]"
@@ -52,16 +52,16 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
                   </span>
                   <div className="min-w-0">
                     <h4 className="font-black leading-snug text-[#102316]">{product.name}</h4>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[#2D6A2D]">{product.bestFor}</p>
+                    <p className="mt-1 line-clamp-1 text-sm text-[#5f6f63]">{product.bestFor}</p>
                   </div>
                 </div>
                 <span className="shrink-0 rounded-full bg-white px-3 py-1 text-sm font-black text-[#2D6A2D] ring-1 ring-[#dcebd7]">
                   {product.price}
                 </span>
               </div>
-              <div className="mt-3 flex items-center justify-between gap-3">
-                <p className="line-clamp-2 text-sm leading-5 text-[#5f6f63]">{product.note}</p>
-                <span className={`shrink-0 text-xs font-black uppercase tracking-widest ${isSelected ? "text-[#2D6A2D]" : "text-[#94a3b8]"}`}>
+              <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#edf4ea] pt-3">
+                <p className="line-clamp-1 text-xs leading-5 text-[#5f6f63]">{product.note}</p>
+                <span className={`shrink-0 text-[11px] font-black uppercase tracking-widest ${isSelected ? "text-[#2D6A2D]" : "text-[#94a3b8]"}`}>
                   {isSelected ? "Selecionado" : "Escolher"}
                 </span>
               </div>
@@ -81,11 +81,12 @@ export function ProductChoiceCards({ products, orderHref }: ProductChoiceCardsPr
               {selected.price}
             </span>
           </div>
+          <p className="mb-3 line-clamp-1 text-sm text-[#5f6f63]">{selected.bestFor}</p>
           <Link
             href={selectedHref}
             className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2D6A2D] px-4 py-3 text-sm font-black text-white shadow-lg shadow-[#2d6a2d]/15 transition hover:bg-[#245f2f]"
           >
-            Pedir agora
+            Pedir com este produto
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

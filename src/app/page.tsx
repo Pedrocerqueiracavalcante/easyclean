@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
-import { MobileInstallPrompt } from "@/components/mobile-install-prompt";
 import { ServicesCarousel } from "@/components/services-carousel";
 import { servicePages } from "@/lib/service-pages";
 
@@ -133,8 +132,8 @@ export default function LandingPage() {
               Roupa limpa,
               <span className="block text-[#2d6a2d]">sem perder tempo.</span>
             </h1>
-            <p className="mb-8 max-w-xl text-lg leading-8 text-[#475569]">
-              Agenda recolha, paga online e acompanha o pedido até à entrega. Tudo numa conta Easy Clean.
+            <p className="mb-8 max-w-lg text-base leading-7 text-[#475569] md:text-lg">
+              Agenda, paga online e acompanha o pedido até à entrega.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -149,31 +148,29 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </div>
-
-            <MobileInstallPrompt />
           </div>
 
           <div className="hidden md:block">
-            <div className="ml-auto max-w-md rounded-[34px] border border-[#dbe8d4] bg-white/92 p-5 shadow-2xl shadow-[#2d6a2d]/14 backdrop-blur">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2d6a2d]">Pedido rápido</p>
-                  <p className="mt-1 text-xl font-black text-[#102316]">A tua recolha</p>
-                </div>
+            <div className="ml-auto max-w-md rounded-[34px] border border-[#dbe8d4] bg-white/92 p-6 shadow-2xl shadow-[#2d6a2d]/14 backdrop-blur">
+              <div className="mb-5 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef8e8] text-[#2d6a2d]">
                   <CalendarCheck className="h-6 w-6" />
                 </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2d6a2d]">Pedido rápido</p>
+                  <p className="mt-1 text-xl font-black text-[#102316]">Tudo numa conta</p>
+                </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid gap-3 sm:grid-cols-3">
                 {[
-                  ["Serviço", "Lavagem + passagem"],
                   ["Recolha", "Hoje ou amanhã"],
                   ["Pagamento", "Cartão seguro"],
+                  ["Estado", "Acompanhamento"],
                 ].map(([label, value]) => (
-                  <div key={label} className="flex items-center justify-between rounded-2xl bg-[#f7fbf4] px-4 py-3">
-                    <span className="text-sm font-semibold text-[#64748b]">{label}</span>
-                    <span className="text-sm font-black text-[#102316]">{value}</span>
+                  <div key={label} className="rounded-2xl bg-[#f7fbf4] px-4 py-4">
+                    <span className="block text-[11px] font-black uppercase tracking-[0.16em] text-[#2d6a2d]">{label}</span>
+                    <span className="mt-2 block text-sm font-black text-[#102316]">{value}</span>
                   </div>
                 ))}
               </div>
@@ -185,7 +182,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <p className="text-sm font-black">Acompanhamento online</p>
-                    <p className="text-xs text-white/70">Estado e mapa do pedido no app.</p>
+                    <p className="text-xs text-white/70">Pedido, estado e pagamento no mesmo lugar.</p>
                   </div>
                 </div>
                 <Link href="/register">
@@ -231,7 +228,7 @@ export default function LandingPage() {
           <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Confiança</p>
-              <h2 className="max-w-2xl text-3xl font-bold text-[#102316] md:text-4xl">Preparado para receber clientes reais</h2>
+              <h2 className="max-w-2xl text-3xl font-bold text-[#102316] md:text-4xl">Tudo pronto para usar</h2>
             </div>
             <Link href="/register">
               <Button className="bg-[#2d6a2d] text-white hover:bg-[#245f2f]">Criar conta</Button>
@@ -260,8 +257,8 @@ export default function LandingPage() {
           <div className="mb-12 text-center">
             <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#2d6a2d]">Serviços</p>
             <h2 className="mb-4 text-3xl font-bold text-[#102316] md:text-4xl">Serviços de lavandaria</h2>
-            <p className="mx-auto max-w-xl text-[#64748b]">
-              O cliente conhece os serviços e depois entra ou cria conta para fazer o pedido.
+            <p className="mx-auto max-w-lg text-sm leading-6 text-[#64748b] md:text-base">
+              Escolhe o serviço e entra para pedir.
             </p>
           </div>
 

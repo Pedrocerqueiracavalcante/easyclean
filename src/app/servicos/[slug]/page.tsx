@@ -100,7 +100,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
               Guia Easy Clean
             </div>
             <h1 className="mb-4 max-w-3xl text-4xl font-black leading-[0.98] text-[#102316] md:text-6xl">{service.title}</h1>
-            <p className="max-w-2xl text-base leading-7 text-[#5f6f63]">{service.subtitle}</p>
+            <p className="max-w-xl text-base leading-7 text-[#5f6f63]">{service.subtitle}</p>
           </div>
 
           <div className="rounded-[24px] border border-[#dcebd7] bg-white p-5 shadow-xl shadow-[#1f5d28]/8">
@@ -119,16 +119,16 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
       <section className="mx-auto grid max-w-6xl gap-5 px-4 py-8 md:grid-cols-[0.82fr_1.18fr] md:py-12">
         <div>
-          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#2D6A2D]">Detalhes do serviço</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#2D6A2D]">Resumo rápido</p>
           <h2 className="mb-3 text-2xl font-black text-[#102316] md:text-3xl">O cuidado certo para cada tecido</h2>
-          <p className="text-sm leading-7 text-[#5f6f63]">{service.description}</p>
+          <p className="max-w-xl text-sm leading-7 text-[#5f6f63]">{service.description}</p>
 
           <div className="mt-5 rounded-[24px] border border-[#cde5c4] bg-[#f2faee] p-4">
-            <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Para que serve</p>
+            <p className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Ideal para</p>
             <p className="text-sm leading-6 text-[#36583a]">{service.bestFor}</p>
           </div>
 
-          <div className="mt-4 grid gap-2">
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {service.highlights.map((item) => (
               <div key={item} className="rounded-2xl border border-[#dcebd7] bg-white px-4 py-3 text-sm font-black text-[#102316] shadow-sm">
                 {item}
@@ -155,7 +155,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
               </div>
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2D6A2D]">Tecidos</p>
-                <h3 className="font-black text-[#102316]">Cuidado indicado</h3>
+                <h3 className="font-black text-[#102316]">Ver rápido</h3>
               </div>
             </div>
 
@@ -166,7 +166,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
                     <h4 className="font-black text-[#102316]">{item.fabric}</h4>
                     <span className="text-xs font-black uppercase tracking-wider text-[#2D6A2D]">{item.product}</span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-sm leading-5 text-[#66736a]">{item.care}</p>
+                  <p className="mt-1 line-clamp-1 text-sm leading-5 text-[#66736a]">{item.care}</p>
                 </div>
               ))}
             </div>
@@ -179,7 +179,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 <h3 className="mt-1 font-black text-[#102316]">Escolhe e pede</h3>
               </div>
               <span className="rounded-full bg-[#eef8e8] px-3 py-1.5 text-xs font-black text-[#2D6A2D]">
-                Preço claro
+                Direto
               </span>
             </div>
             <ProductChoiceCards products={service.products} orderHref={orderHref} />
@@ -193,7 +193,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <div className="mb-5 flex items-end justify-between gap-3">
             <div>
               <p className="mb-2 text-sm font-black uppercase tracking-widest text-[#2D6A2D]">Outros serviços</p>
-              <h2 className="text-2xl font-black text-[#102316] sm:text-3xl">Continua a explorar</h2>
+              <h2 className="text-2xl font-black text-[#102316] sm:text-3xl">Ver também</h2>
             </div>
             <Link href="/#servicos" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-[#2D6A2D] ring-1 ring-[#dcebd7] transition hover:bg-[#eef8e8]">
               Todos

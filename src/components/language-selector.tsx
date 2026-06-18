@@ -366,10 +366,7 @@ export function LanguageSelector() {
                   <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-[#dbe8d4] bg-white shadow-sm">
                     <Image src={item.flagSrc} alt="" fill sizes="32px" className="object-cover" />
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-black">{item.name}</span>
-                    <span className="block text-[11px] font-bold uppercase tracking-widest text-gray-400">{item.label}</span>
-                  </span>
+                  <span className="min-w-0 flex-1 text-sm font-black">{item.name}</span>
                   {active ? <Check className="h-4 w-4 shrink-0" /> : null}
                 </button>
               );
