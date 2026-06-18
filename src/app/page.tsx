@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import {
   CalendarCheck,
   CalendarDays,
@@ -19,6 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { LanguageSelector } from "@/components/language-selector";
 import { ServicesCarousel } from "@/components/services-carousel";
+import { resolveSessionRedirect } from "@/lib/navigation-policy";
+import { getServerSession } from "@/lib/server-session";
 import { servicePages } from "@/lib/service-pages";
 
 const steps = [
@@ -46,7 +49,16 @@ const benefits = [
   },
 ];
 
-export default function LandingPage() {
+export const dynamic = "force-dynamic";
+
+export default async function LandingPage() {
+  const session = await getServerSession();
+  const redirectTo = resolveSessionRedirect("/", Boolean(session?.user?.id));
+
+  if (redirectTo) {
+    redirect(redirectTo);
+  }
+
   const contactInfo = {
     location: "Luxembourg",
     email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Adicionar email",

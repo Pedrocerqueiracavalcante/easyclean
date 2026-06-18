@@ -1,11 +1,22 @@
-const CACHE_NAME = "easyclean-mobile-v1";
+const CACHE_NAME = "easyclean-mobile-v2";
 const STATIC_ASSETS = [
-  "/",
   "/manifest.webmanifest",
   "/app-icon.svg",
   "/easyclean-logo.png",
   "/easyclean-hero-bg.png"
 ];
+
+function shouldUseNetworkOnlyForNavigation() {
+  return true;
+}
+
+function shouldCacheStaticAsset(pathname) {
+  if (pathname.startsWith("/_next/static/")) {
+    return true;
+  }
+
+  return STATIC_ASSETS.includes(pathname);
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -36,7 +47,13 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("/")));
+    if (shouldUseNetworkOnlyForNavigation(url.pathname)) {
+      return;
+    }
+    return;
+  }
+
+  if (!shouldCacheStaticAsset(url.pathname)) {
     return;
   }
 
