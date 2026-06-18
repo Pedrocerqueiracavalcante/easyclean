@@ -1,5 +1,5 @@
 export type SocialProvider = "google" | "facebook" | "apple";
-export type SocialProviderStatus = "active";
+export type SocialProviderStatus = "active" | "soon";
 
 export const socialAuthProviders: Array<{
   provider: SocialProvider;
@@ -7,8 +7,8 @@ export const socialAuthProviders: Array<{
   status: SocialProviderStatus;
 }> = [
   { provider: "google", label: "Google", status: "active" },
-  { provider: "facebook", label: "Facebook", status: "active" },
-  { provider: "apple", label: "Apple", status: "active" },
+  { provider: "facebook", label: "Facebook", status: "soon" },
+  { provider: "apple", label: "Apple", status: "soon" },
 ];
 
 export function getSocialAuthMessage(provider: SocialProvider) {
@@ -18,5 +18,5 @@ export function getSocialAuthMessage(provider: SocialProvider) {
     apple: "Apple",
   };
 
-  return `Não foi possível abrir o login com ${labels[provider]}. Confirma se as credenciais OAuth deste provedor estão configuradas no Cloudflare.`;
+  return `Não foi possível abrir o login com ${labels[provider]}. Tenta novamente em alguns instantes.`;
 }

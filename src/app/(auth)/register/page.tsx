@@ -26,7 +26,7 @@ function SocialIcon({ provider }: { provider: SocialProvider }) {
   }
 
   if (provider === "apple") {
-    return <Apple className="h-6 w-6 text-gray-900" aria-hidden="true" />;
+    return <Apple className="h-6 w-6 text-gray-500" aria-hidden="true" />;
   }
 
   return (
@@ -82,6 +82,12 @@ export default function RegisterPage() {
   }
 
   async function handleSocial(provider: SocialProvider) {
+    const socialProvider = socialAuthProviders.find((item) => item.provider === provider);
+    if (socialProvider?.status !== "active") {
+      setMessage(`${socialProvider?.label ?? "Este login"} estará disponível em breve.`);
+      return;
+    }
+
     setMessage("");
     setSocialLoading(provider);
 
@@ -105,28 +111,40 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="rounded-3xl border border-[#dbe8d4] bg-white p-8 shadow-xl shadow-[#2d6a2d]/8">
-        <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
-        <p className="mt-1 text-sm text-gray-500">Agenda recolhas e acompanha os pedidos num só lugar.</p>
+      <div className="rounded-3xl border border-[#dbe8d4] bg-white p-6 shadow-xl shadow-[#2d6a2d]/8 sm:p-8">
+        <h1 className="text-2xl font-black text-gray-900">Criar conta</h1>
+        <p className="mt-1 text-sm text-gray-500">Agenda e acompanha tudo online.</p>
 
-        <div className="mt-8 grid grid-cols-3 gap-3">
-          {socialAuthProviders.map((item) => (
-            <button
-              key={item.provider}
-              type="button"
-              onClick={() => handleSocial(item.provider)}
-              aria-label={`Continuar com ${item.label}`}
-              disabled={socialLoading === item.provider}
-              className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-white text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:shadow-md disabled:opacity-60"
-            >
-              <SocialIcon provider={item.provider} />
-              {socialLoading === item.provider ? "Abrindo" : item.label}
-            </button>
-          ))}
+        <div className="mt-7 space-y-3">
+          <button
+            type="button"
+            onClick={() => handleSocial("google")}
+            disabled={socialLoading === "google"}
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-[#d9e6d5] bg-white text-sm font-black text-gray-900 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:shadow-md disabled:opacity-60"
+          >
+            <SocialIcon provider="google" />
+            {socialLoading === "google" ? "Abrindo Google..." : "Continuar com Google"}
+          </button>
+
+          <div className="grid grid-cols-2 gap-3">
+            {socialAuthProviders
+              .filter((item) => item.provider !== "google")
+              .map((item) => (
+                <button
+                  key={item.provider}
+                  type="button"
+                  onClick={() => handleSocial(item.provider)}
+                  aria-label={`Continuar com ${item.label}`}
+                  disabled={item.status !== "active" || socialLoading === item.provider}
+                  className="flex h-14 items-center justify-center gap-2 rounded-2xl border border-[#e2e8df] bg-[#fbfdf9] text-xs font-bold text-gray-400 shadow-sm disabled:cursor-not-allowed disabled:opacity-75"
+                >
+                  <SocialIcon provider={item.provider} />
+                  {item.label}
+                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-gray-400">em breve</span>
+                </button>
+              ))}
+          </div>
         </div>
-        <p className="mt-3 text-center text-xs leading-5 text-gray-400">
-          Google, Facebook e Apple exigem credenciais OAuth configuradas no Cloudflare.
-        </p>
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[#e2e8df]" />
@@ -135,7 +153,7 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Nome completo" placeholder="Maria Santos" value={form.name} onChange={set("name")} required />
+          <Input label="Nome" placeholder="Maria Santos" value={form.name} onChange={set("name")} required />
           <Input
             label="Email"
             type="email"
@@ -148,23 +166,26 @@ export default function RegisterPage() {
           />
           <Input label="Telefone" type="tel" placeholder="+352 621 000 000" value={form.phone} onChange={set("phone")} />
           <Input label="Senha" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" value={form.password} onChange={set("password")} required />
-          {message && (
+
+          {message ? (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
             </div>
-          )}
+          ) : null}
+
           <Button type="submit" className="w-full" loading={loading}>
-            Criar conta grátis
+            Criar conta
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
-          Ao registares-te, aceitas os{" "}
-          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos de Serviço</Link>{" "}
+        <p className="mt-5 text-center text-xs text-gray-400">
+          Ao continuar, aceitas os{" "}
+          <Link href="/termos" className="text-[#2D6A2D] hover:underline">Termos</Link>{" "}
           e a{" "}
-          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Política de Privacidade</Link>.
+          <Link href="/privacidade" className="text-[#2D6A2D] hover:underline">Privacidade</Link>.
         </p>
       </div>
+
       <p className="mt-6 text-center text-sm text-gray-500">
         Já tens conta?{" "}
         <Link href="/login" className="font-semibold text-[#2D6A2D] hover:underline">Entrar</Link>

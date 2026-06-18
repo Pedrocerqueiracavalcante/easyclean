@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Apple, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { Apple, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "@/lib/auth-client";
@@ -29,7 +29,7 @@ function SocialIcon({ provider }: { provider: SocialProvider }) {
   }
 
   if (provider === "apple") {
-    return <Apple className="h-6 w-6 text-gray-900" aria-hidden="true" />;
+    return <Apple className="h-6 w-6 text-gray-500" aria-hidden="true" />;
   }
 
   return (
@@ -71,21 +71,26 @@ export default function LoginPage() {
     try {
       const response = await signIn.email({ email: normalizedEmail, password });
       if (response.error) {
-        setMessage("Email ou senha inválidos. Tenta novamente.");
+        setMessage("Email ou senha inválidos.");
         return;
       }
       window.localStorage.setItem(rememberedEmailKey, normalizedEmail);
       router.push("/app/home");
     } catch {
-        setMessage("Email ou senha inválidos. Tenta novamente.");
+      setMessage("Email ou senha inválidos.");
     } finally {
       setLoading(false);
     }
   }
 
   async function handleSocial(provider: SocialProvider) {
-    setMessage("");
+    const socialProvider = socialAuthProviders.find((item) => item.provider === provider);
+    if (socialProvider?.status !== "active") {
+      setMessage(`${socialProvider?.label ?? "Este login"} estará disponível em breve.`);
+      return;
+    }
 
+    setMessage("");
     setSocialLoading(provider);
     try {
       const response = await signIn.social({
@@ -107,50 +112,50 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="mb-5 rounded-[28px] border border-[#dbe8d4] bg-white/85 p-4 shadow-sm backdrop-blur">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2D6A2D] text-white">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <div>
-            <p className="text-sm font-black text-gray-950">Área do cliente</p>
-            <p className="text-xs text-gray-500">Pedidos, moradas, pagamentos e perfil num só lugar.</p>
-          </div>
-        </div>
-      </div>
-
       <div className="rounded-[32px] border border-[#dbe8d4] bg-white p-6 shadow-2xl shadow-[#2d6a2d]/10 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="mb-2 inline-flex rounded-full bg-[#eef8e8] px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#2D6A2D]">
-              Login seguro
+              Área do cliente
             </p>
-            <h1 className="text-2xl font-black text-gray-950">Bem-vindo de volta</h1>
-            <p className="mt-1 text-sm text-gray-500">Entra na tua conta Easy Clean.</p>
+            <h1 className="text-2xl font-black text-gray-950">Entrar</h1>
+            <p className="mt-1 text-sm text-gray-500">Acompanha pedidos, moradas e pagamentos.</p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f7fbf4] text-[#2D6A2D] ring-1 ring-[#dbe8d4]">
             <ShieldCheck className="h-6 w-6" />
           </div>
         </div>
 
-        <div className="mt-7 grid grid-cols-3 gap-3">
-          {socialAuthProviders.map((item) => (
-            <button
-              key={item.provider}
-              type="button"
-              onClick={() => handleSocial(item.provider)}
-              aria-label={`Continuar com ${item.label}`}
-              disabled={socialLoading === item.provider}
-              className="group relative flex h-20 flex-col items-center justify-center gap-1 rounded-2xl border border-[#d9e6d5] bg-[#fbfdf9] text-xs font-bold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:bg-white hover:shadow-md disabled:opacity-60"
-            >
-              <SocialIcon provider={item.provider} />
-              {socialLoading === item.provider ? "Abrindo" : item.label}
-            </button>
-          ))}
+        <div className="mt-7 space-y-3">
+          <button
+            type="button"
+            onClick={() => handleSocial("google")}
+            disabled={socialLoading === "google"}
+            className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-[#d9e6d5] bg-white text-sm font-black text-gray-900 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2D6A2D] hover:shadow-md disabled:opacity-60"
+          >
+            <SocialIcon provider="google" />
+            {socialLoading === "google" ? "Abrindo Google..." : "Continuar com Google"}
+          </button>
+
+          <div className="grid grid-cols-2 gap-3">
+            {socialAuthProviders
+              .filter((item) => item.provider !== "google")
+              .map((item) => (
+                <button
+                  key={item.provider}
+                  type="button"
+                  onClick={() => handleSocial(item.provider)}
+                  aria-label={`Continuar com ${item.label}`}
+                  disabled={item.status !== "active" || socialLoading === item.provider}
+                  className="flex h-14 items-center justify-center gap-2 rounded-2xl border border-[#e2e8df] bg-[#fbfdf9] text-xs font-bold text-gray-400 shadow-sm disabled:cursor-not-allowed disabled:opacity-75"
+                >
+                  <SocialIcon provider={item.provider} />
+                  {item.label}
+                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-gray-400">em breve</span>
+                </button>
+              ))}
+          </div>
         </div>
-        <p className="mt-3 text-center text-xs leading-5 text-gray-400">
-          Google, Facebook e Apple exigem credenciais OAuth configuradas no Cloudflare.
-        </p>
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[#e2e8df]" />
@@ -179,22 +184,12 @@ export default function LoginPage() {
             required
           />
 
-          <div className="grid gap-2 rounded-2xl bg-[#f8faf7] p-3 text-xs text-gray-500">
-            <p className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5 text-[#2D6A2D]" />
-              O email válido fica salvo automaticamente neste dispositivo.
-            </p>
-            <p className="flex items-center gap-2">
-              <LockKeyhole className="h-3.5 w-3.5 text-[#2D6A2D]" />
-              Usa sempre uma senha com pelo menos 8 caracteres.
-            </p>
-          </div>
-
-          {message && (
+          {message ? (
             <div className="rounded-xl border border-[#dbe8d4] bg-[#f7fbf4] px-4 py-3 text-sm leading-5 text-[#245f2f]">
               {message}
             </div>
-          )}
+          ) : null}
+
           <div className="text-right">
             <Link href="/forgot-password" className="text-xs font-semibold text-[#2D6A2D] hover:underline">
               Esqueceste a senha?
@@ -205,10 +200,11 @@ export default function LoginPage() {
           </Button>
         </form>
       </div>
+
       <p className="mt-6 text-center text-sm text-gray-500">
         Não tens conta?{" "}
         <Link href="/register" className="font-semibold text-[#2D6A2D] hover:underline">
-          Regista-te grátis
+          Criar conta
         </Link>
       </p>
     </div>
